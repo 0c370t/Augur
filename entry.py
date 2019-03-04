@@ -33,6 +33,31 @@ def debug_formData():
     return sendImage(image, image_name)
 
 
+@augur.route("/thumbnail", methods=["POST"])
+def debug_thumbnail():
+    if 'file' not in request.files:
+        return error("No file detected in request")
+    if 'size' not in request.args:
+        output_size = 200
+    else:
+        try:
+            output_size = int(request.args['size'])
+        except:
+            if request.args['size'][-2:] == "px":
+                output_size = int(request.args['size'][:-2])
+            else:
+                return error("Invalid size parameter", given_size=request.args['size'])
+
+    image = getImageFromRequest(request)
+    image_name = image[1]
+    image = image[0]
+    image_extension = "." + image_name.split('.')[-1]
+
+    image.thumbnail((output_size, output_size))
+
+    return sendImage(image, image_name)
+
+
 def error(errorText, **kwargs):
     kwargs['error'] = errorText
     return jsonify(kwargs)
