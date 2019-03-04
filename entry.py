@@ -19,10 +19,10 @@ def index():
 
 
 @augur.route("/debug/formData", methods=["POST"])
-def debug():
+def debug_formData():
     # Current intended functionality is returning the image that is sent as form data
     if 'file' not in request.files:
-        return str(request.files) + "\n" + str(request.args) + "\n"
+        return error("No file detected in request")
     image = getImageFromRequest(request)
     # OOF
     image_name = image[1]
@@ -31,6 +31,11 @@ def debug():
 
     # image.save(outTempFile)
     return sendImage(image, image_name)
+
+
+def error(errorText, **kwargs):
+    kwargs['error'] = errorText
+    return jsonify(kwargs)
 
 
 def sendImage(image, image_name):
