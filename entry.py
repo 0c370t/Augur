@@ -15,7 +15,6 @@ augur.secret_key = "EFF121E88B54D79A39CCF18E358BB"
 # TODO: Make lookup function for matching image extension to image format (or just a dict)
 # TODO: Research other ways a file could be sent or referenced
 # TODO  Download more ram
-# TODO: Make all GET requests direct to index (possibly to the section that has their intended endpoint)
 
 # Augur Routes
 
