@@ -1,2 +1,61 @@
 {% extends "template.html.jinja" %}
 {% set pageTitle = "Home" %}
+{% block stylesheets %}
+<link rel="stylesheet" href="/css/endpoint-cards.css" />
+{% endblock %}
+
+
+{% block main %}
+<section class="endpoint-card request-POST">
+  <header>
+    <h2>Thumbnail</h2>
+    <pre>/thumbnail</pre>
+    <p>Used to get a thumbnail of the uploaded image, maintains aspect ratio, and will default to a max width or height of 200px (whichever is larger).</p>
+  </header>
+  <h3>Parameters</h3>
+  <table class="param-table">
+    <tr>
+      <th>
+        Field
+      </th>
+      <th>
+        Description
+      </th>
+      <th>
+        Format
+      </th>
+    </tr>
+    <tr>
+      <th>
+        file
+      </th>
+      <td>
+        Image File (with extension in filename)
+      </td>
+    </tr>
+    <tr>
+      <th>
+        size
+      </th>
+      <td>
+          Size (in pixels) of image to return
+      </td>
+      <td>
+        <pre>[0-9]+(px)?</pre>
+      </td>
+    </tr>
+  </table>
+  <h3>Example Request</h3>
+  <p>With size in URL</p>
+  <pre class="example">curl 'https://augur.noimbrian.com/thumbnail?size=100px' -F "file=@.../test_image.jpg" > image.jpg</pre>
+  <p>With size in form data</p>
+  <pre class="example">curl 'https://augur.noimbrian.com/thumbnail' -F "file=@.../test_image.jpg" -F "size=100px" > image.jpg</pre>
+  <h4>Response:</h4>
+  <p>Image file as response</p>
+  <h4>Error Format:</h4>
+  <pre class="example">{
+      error: Error Message,
+      given_size: If invalid, returned for inspection
+}</pre>
+</section>
+{% endblock %}
