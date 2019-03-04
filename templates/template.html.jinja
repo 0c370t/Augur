@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--
+      You can look but don't touch
+
+      Powered by Flask, imgpy, and caffine
+      -->
+
+    <title>Augur | {{ pageTitle }}</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://tools.noimbrian.com/css/reset.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    {# Place additional stylesheets here #}
+    {% block stylesheets %}
+    {% endblock %}
+
+
+    <!-- OpenGraph and Linking tags -->
+    <meta name="author" content="Brian Donald">
+    <meta name="og:url" content="{{ url_for(request.endpoint) }}">
+		<meta name="og:title" content="Augur | {{ pageTitle }}">
+		<meta name="og:description" content="">
+		<meta name="og:image" content="">
+
+    <!-- Viewport and compatibility tags -->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  </head>
+
+  <body>
+    <header>
+      <div class="text-wrapper">
+        <h1>Augur</h1>
+        <span>An Image Utility API</span>
+      </div>
+      <div class="image-wrapper">
+        <img src="/img/logo.png" alt=" "/>
+      </div>
+    </header>
+
+    <main>
+      {% block main %}
+        {{ pageTitle |default("This")}} page is still under construction.
+      {% endblock %}
+    </main>
+
+    <footer>
+      Copywrite 2019 Brian Donald
+    </footer>
+
+    {# Place additional script tags here #}
+    {% block scripts %}
+    {% endblock %}
+  </body>
+
+</html>

@@ -1,0 +1,63 @@
+/*
+  Created by Brian Donald
+
+	Media Queries used in this sheet are :
+	Anything bigger than phone:
+		@media screen and (min-width:769px) and (max-resolution:143dpi)
+
+	Tablet / Phablet Screens:
+		@media screen and (min-width:769px) and (max-width:1024px),(min-width:1024px) and (min-resolution: 144dpi)
+
+	Desktop Only:
+		@media screen and (min-width:1025px) and (max-resolution: 143dpi)
+*/
+
+/* Body Styles */
+
+body {
+    background-color: #EEE;
+    color: #222;
+}
+
+:root {
+    font-family: sans-serif;
+}
+
+/* Header Styles */
+header{
+  border-bottom:1px solid #999;
+  background-color:white;
+}
+header .text-wrapper{
+    padding:2rem;
+}
+/* Desktop */
+@media screen and (min-width:1025px) and (max-resolution: 143dpi){
+  header{
+  }
+}
+
+
+/* Main Styles */
+main{
+  background-color:white;
+  padding:2rem;
+
+}
+/* Desktop */
+@media screen and (min-width:1025px) and (max-resolution: 143dpi){
+  main{
+  }
+}
+/* Footer Styles */
+footer{
+  text-align:center;
+  border-top:1px solid #999;
+  line-height:5vh;
+}
+
+/* Desktop */
+@media screen and (min-width:1025px) and (max-resolution: 143dpi){
+  footer{
+  }
+}

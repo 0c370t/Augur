@@ -1,0 +1,95 @@
+/*
+  Created by Brian Donald
+
+	Media Queries used in this sheet are :
+	Anything bigger than phone:
+		@media screen and (min-width:769px) and (max-resolution:143dpi)
+
+	Tablet / Phablet Screens:
+		@media screen and (min-width:769px) and (max-width:1024px),(min-width:1024px) and (min-resolution: 144dpi)
+
+	Desktop Only:
+		@media screen and (min-width:1025px) and (max-resolution: 143dpi)
+*/
+/* Body Styles */
+body {
+  position: relative;
+}
+
+/* Header Styles */
+header {
+  min-height: 20vh;
+  width: 100vw;
+  overflow-y: hidden;
+  padding-top: 2.5vh;
+}
+
+header .text-wrapper {  
+  /* Vertical Center */
+  height: 15vh;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  width:100%;
+  text-align:center;
+}
+
+header .image-wrapper {
+    height: 15vh;
+    width:100%;
+}
+
+header .image-wrapper img {
+	display:block;
+    max-height: 15vh;
+    top: 50%;
+    position: relative;
+    transform: translateY(-50%);
+    margin: 0 auto;
+}
+
+/* Desktop */
+@media screen and (min-width:1025px) and (max-resolution: 143dpi) {
+  header {
+    width: 50%;
+    margin: 0 auto;
+  }
+  header .text-wrapper{
+  	float: left;
+  	width:auto;
+  	text-align:left;
+  }
+  header .image-wrapper{
+	float: right;
+	width: auto;
+	padding-right: 2rem;
+  } header .image-wrapper img{
+  	margin: 0;
+  }
+}
+
+/* Main Styles */
+main {
+  min-height: 75vh;
+}
+
+/* Desktop */
+@media screen and (min-width:1025px) and (max-resolution: 143dpi) {
+  main {
+    width: 50%;
+    margin: 0 auto;
+  }
+}
+
+/* Footer Styles */
+footer{
+  height:5vh;
+  background-color:white;
+}
+/* Desktop */
+@media screen and (min-width:1025px) and (max-resolution: 143dpi) {
+  footer{
+    width:50%;
+    margin: 0 auto;
+  }
+}
