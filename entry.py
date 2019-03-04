@@ -12,8 +12,14 @@ augur = Flask(__name__, static_url_path="", static_folder="static")
 application = augur
 augur.secret_key = "EFF121E88B54D79A39CCF18E358BB"
 
+# TODO: Make lookup function for matching image extension to image format (or just a dict)
+# TODO: Research other ways a file could be sent or referenced
+# TODO  Download more ram
+# TODO: Make all GET requests direct to index (possibly to the section that has their intended endpoint)
 
 # Augur Routes
+
+
 @augur.route("/")
 def index():
     # Displays an explanation of the API
@@ -23,7 +29,7 @@ def index():
 @augur.route("/debug/formData", methods=["POST"])
 def debug_formData():
     # Current intended functionality is returning the image that is sent as form data
-    image = getImageFromRequest(request)
+    image = getImageDataFromRequest(request)
     # OOF
     image_name = image[1]
     image_extension = "." + image_name.split('.')[-1]
@@ -47,14 +53,13 @@ def debug_thumbnail():
                 raise InvalidRequest(
                     "Invalid size parameter", given_size=request.args['size'])
 
-    image = getImageFromRequest(request)
-    image_name = image[1]
-    image = image[0]
-    image_extension = "." + image_name.split('.')[-1]
+    image_data = getImageDataFromRequest(request)
+    image_data['image'].thumbnail((output_size, output_size))
 
-    image.thumbnail((output_size, output_size))
+    return sendImage(image_data)
 
 # Augur error handlers
+
 
 @augur.errorhandler(InvalidRequest)
 def error(error):
@@ -65,18 +70,20 @@ def error(error):
 # Helper Methods
 
 
-def sendImage(image, image_name):
-    return send_file(prepareImageForReturn(image), as_attachment=True, attachment_filename=image_name)
+def sendImage(image_data):
+    # Expects dict strucutre from getImageDataFromRequest()
+    imageAsFile = pilImageToFile(image_data['image'])
+    return send_file(imageAsFile, as_attachment=True, attachment_filename=image_data['image_name'])
 
 
-def prepareImageForReturn(image):
+def pilImageToFile(image):
     imageIO = StringIO()
     image.save(imageIO, 'JPEG', quality=70)
     imageIO.seek(0, 0)
     return imageIO
 
 
-def getImageFromRequest(request):
+def getImageDataFromRequest(request):
     # This method will be expanded to include other ways of including a file, rather than just including it in the initial request (such as a url to get the image from)
     # Ensure file actually exists
     if 'file' not in request.files:
@@ -84,4 +91,9 @@ def getImageFromRequest(request):
             "No file detected in request (It should be attached with name file)")
     image = request.files['file']
     newImage = Image.open(image)
-    return [newImage, image.filename]
+    out = {
+        'image': newImage,
+        'image_name': image.filename,
+        'image_extension': "." + image.filename.split('.')[-1]
+    }
+    return out
