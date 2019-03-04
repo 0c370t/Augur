@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 from flask import Flask, Blueprint, render_template, jsonify, request, Response, url_for, send_file
-from tempfile import NamedTemporaryFile
-from shutil import copyfileobj
+from PIL import Image
+from StringIO import StringIO
 # Used if augur is to be a Blueprint
 # augur = Blueprint("augur", __name__,
 #                    template_folder = "templates",
@@ -24,8 +24,24 @@ def debug():
     if 'file' not in request.files:
         return str(request.files) + "\n" + str(request.args) + "\n"
     image = getImageFromRequest(request)
-    image_name = image.filename
-    return str(image.read())
+    # OOF
+    image_name = image[1]
+    image_extension = "." + image_name.split('.')[-1]
+    image = image[0]
+
+    # image.save(outTempFile)
+    return sendImage(image, image_name)
+
+
+def sendImage(image, image_name):
+    return send_file(prepareImageForReturn(image), as_attachment=True, attachment_filename=image_name)
+
+
+def prepareImageForReturn(image):
+    imageIO = StringIO()
+    image.save(imageIO, 'JPEG', quality=70)
+    imageIO.seek(0, 0)
+    return imageIO
 
 
 def getImageFromRequest(request):
@@ -34,4 +50,5 @@ def getImageFromRequest(request):
     if 'file' not in request.files:
         raise Exception("No File in given request!")
     image = request.files['file']
-    return image
+    newImage = Image.open(image)
+    return [newImage, image.filename]
