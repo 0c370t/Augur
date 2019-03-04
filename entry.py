@@ -2,6 +2,7 @@
 from flask import Flask, Blueprint, render_template, jsonify, request, Response, url_for, send_file
 from PIL import Image
 from StringIO import StringIO
+from errors import InvalidRequest
 # Used if augur is to be a Blueprint
 # augur = Blueprint("augur", __name__,
 #                    template_folder = "templates",
@@ -12,6 +13,7 @@ application = augur
 augur.secret_key = "EFF121E88B54D79A39CCF18E358BB"
 
 
+# Augur Routes
 @augur.route("/")
 def index():
     # Displays an explanation of the API
@@ -21,8 +23,6 @@ def index():
 @augur.route("/debug/formData", methods=["POST"])
 def debug_formData():
     # Current intended functionality is returning the image that is sent as form data
-    if 'file' not in request.files:
-        return error("No file detected in request")
     image = getImageFromRequest(request)
     # OOF
     image_name = image[1]
@@ -35,8 +35,6 @@ def debug_formData():
 
 @augur.route("/thumbnail", methods=["POST"])
 def debug_thumbnail():
-    if 'file' not in request.files:
-        return error("No file detected in request")
     if 'size' not in request.args:
         output_size = 200
     else:
@@ -46,7 +44,8 @@ def debug_thumbnail():
             if request.args['size'][-2:] == "px":
                 output_size = int(request.args['size'][:-2])
             else:
-                return error("Invalid size parameter", given_size=request.args['size'])
+                raise InvalidRequest(
+                    "Invalid size parameter", given_size=request.args['size'])
 
     image = getImageFromRequest(request)
     image_name = image[1]
@@ -55,12 +54,15 @@ def debug_thumbnail():
 
     image.thumbnail((output_size, output_size))
 
-    return sendImage(image, image_name)
+# Augur error handlers
 
+@augur.errorhandler(InvalidRequest)
+def error(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
 
-def error(errorText, **kwargs):
-    kwargs['error'] = errorText
-    return jsonify(kwargs)
+# Helper Methods
 
 
 def sendImage(image, image_name):
@@ -78,7 +80,8 @@ def getImageFromRequest(request):
     # This method will be expanded to include other ways of including a file, rather than just including it in the initial request (such as a url to get the image from)
     # Ensure file actually exists
     if 'file' not in request.files:
-        raise Exception("No File in given request!")
+        raise InvalidRequest(
+            "No file detected in request (It should be attached with name file)")
     image = request.files['file']
     newImage = Image.open(image)
     return [newImage, image.filename]
