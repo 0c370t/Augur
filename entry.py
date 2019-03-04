@@ -25,7 +25,7 @@ def debug():
         return str(request.files) + "\n" + str(request.args) + "\n"
     image = getImageFromRequest(request)
     image_name = image.filename
-    return send_file(image, attachment_filename=image_name, as_attachment=True)
+    return str(image.read())
 
 
 def getImageFromRequest(request):
