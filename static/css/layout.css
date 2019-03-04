@@ -16,15 +16,15 @@ body {
   position: relative;
 }
 
-/* Header Styles */
-header {
+/* Page Header Styles */
+body > header {
   min-height: 20vh;
   width: 100vw;
   overflow-y: hidden;
   padding-top: 2.5vh;
 }
 
-header .text-wrapper {  
+body > header .text-wrapper {
   /* Vertical Center */
   height: 15vh;
   display: flex;
@@ -34,12 +34,12 @@ header .text-wrapper {
   text-align:center;
 }
 
-header .image-wrapper {
+body > header .image-wrapper {
     height: 15vh;
     width:100%;
 }
 
-header .image-wrapper img {
+body > header .image-wrapper img {
 	display:block;
     max-height: 15vh;
     top: 50%;
@@ -50,20 +50,20 @@ header .image-wrapper img {
 
 /* Desktop */
 @media screen and (min-width:1025px) and (max-resolution: 143dpi) {
-  header {
+  body > header {
     width: 50%;
     margin: 0 auto;
   }
-  header .text-wrapper{
+  body > header .text-wrapper{
   	float: left;
   	width:auto;
   	text-align:left;
   }
-  header .image-wrapper{
+  body > header .image-wrapper{
 	float: right;
 	width: auto;
 	padding-right: 2rem;
-  } header .image-wrapper img{
+  } body > header .image-wrapper img{
   	margin: 0;
   }
 }
