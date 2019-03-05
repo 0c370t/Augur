@@ -28,7 +28,7 @@ for format in format_extension_map:
         valid_extensions += [extension]
 
 def getFormatByExtension(extension):
-    extension = extension.split('.')[-1]
+    extension = extension.split('.')[-1].lower()
     if extension not in valid_extensions:
         raise InvalidRequest("Invalid extension!", detected_extension=extension)
     for format in format_extension_map:
