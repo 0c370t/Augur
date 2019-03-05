@@ -20,10 +20,13 @@
 
     <!-- OpenGraph and Linking tags -->
     <meta name="author" content="Brian Donald">
-    <meta name="og:url" content="{{ url_for(request.endpoint) }}">
-		<meta name="og:title" content="Augur | {{ pageTitle }}">
-		<meta name="og:description" content="">
-		<meta name="og:image" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://augur.noimbrian.com{{ url_for(request.endpoint) }}">
+		<meta property="og:title" content="Augur | {{ pageTitle }}">
+    <meta property="og:site_name" content="Augur">
+		<meta property="og:description" content="An Image Utility API">
+		<meta property="og:image" content="https://augur.noimbrian.com/img/logo-text.png">
+    <meta property="og:image:type" content="image/png">
 
     <!-- Viewport and compatibility tags -->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
