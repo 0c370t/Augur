@@ -38,20 +38,6 @@ def doc(requested_doc):
     raise InvalidRequest(
         "The endpoint you have requested does not exist!", endpoint=requested_doc)
 
-
-@augur.route("/debug/formData", methods=["POST"])
-def debug_formData():
-    # Current intended functionality is returning the image that is sent as form data
-    image = getImageDataFromRequest(request)
-    # OOF
-    image_name = image[1]
-    image_extension = "." + image_name.split('.')[-1]
-    image = image[0]
-
-    # image.save(outTempFile)
-    return sendImage(image, image_name)
-
-
 @augur.route("/thumbnail", methods=["POST"])
 def debug_thumbnail():
     if 'size' not in request.args and 'size' not in request.form:
