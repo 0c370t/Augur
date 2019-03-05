@@ -25,6 +25,14 @@ section.endpoint-card.request-POST header h2::before {
   font-weight: normal;
   border-right: solid 2px #D22;
 }
+section.endpoint-card.request-GET header h2::before {
+  content: "GET";
+  color: #2B2;
+  margin-right: 0.5rem;
+  padding: 0 0.5rem 0 0;
+  font-weight: normal;
+  border-right: solid 2px #2B2;
+}
 
 section.endpoint-card p {
   text-indent: 2rem;
