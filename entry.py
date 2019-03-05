@@ -43,17 +43,22 @@ def debug_thumbnail():
     output_size = getArg(request,"size",200)
     try:
         output_size = int(output_size)
-        except:
-            if tempSize[-2:] == "px":
+    except:
+        if tempSize[-2:] == "px":
             output_size = int(output_size[:-2])
-            else:
-                raise InvalidRequest(
+        else:
+            raise InvalidRequest(
                 "Invalid size parameter", given_size=output_size)
 
-    image_data = getImageDataFromRequest(request)
-    image_data['image'].thumbnail((output_size, output_size))
 
-    return sendImage(image_data)
+    request.image_data['image'].thumbnail((output_size, output_size))
+
+    return sendImage(request.image_data)
+
+@augur.before_request
+def preprocessor():
+    request.image_data = getImageDataFromRequest(request)
+    request.image_data['image_format'] = getArg(request,'output_format',request.image_data['image_format'])
 
 # Augur error handlers
 
