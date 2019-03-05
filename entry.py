@@ -18,9 +18,10 @@ from image_format import getFormatByExtension
 # TODO  Download more ram
 
 # Globals
-endpoints_raw = open("endpoints.json").read()
+endpoints_raw = open("json/endpoints.json").read()
 endpoints = json.loads(endpoints_raw)
-
+global_parameters_raw = open("json/global_params.json").read()
+global_parameters = json.loads(global_parameters_raw)
 
 # Augur Routes
 
@@ -28,12 +29,14 @@ endpoints = json.loads(endpoints_raw)
 @augur.route("/")
 def index():
     # Displays an explanation of the API
-    return render_template("index.html.jinja", docs=endpoints)
+    return render_template("index.html.jinja", docs=endpoints, global_params=global_parameters)
 
 
 @augur.route("/doc/<string:requested_doc>", methods=["GET"])
 def doc(requested_doc):
     if requested_doc in endpoints:
+        doc = endpoints[requested_doc]
+        doc['global_parameters'] = global_parameters[doc['method']]
         return jsonify(endpoints[requested_doc])
     raise InvalidRequest(
         "The endpoint you have requested does not exist!", endpoint=requested_doc)
