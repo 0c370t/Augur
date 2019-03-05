@@ -18,7 +18,7 @@ from image_format import getFormatByExtension
 # TODO  Download more ram
 
 # Globals
-endpoints_raw = open("endpoints.json").read()
+endpoints_raw = open("json/endpoints.json").read()
 endpoints = json.loads(endpoints_raw)
 
 
