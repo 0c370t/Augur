@@ -81,15 +81,22 @@ section.endpoint-card table.param-table tr th:first-child {
 
 section.endpoint-card table.param-table tr th {
   text-align: left;
+}
+section.endpoint-card table.param-table tr th:nth-child(2) {
+    padding-left: 0.5rem;
+}
+section.endpoint-card table.param-table th+td {
   padding-left: 0.5rem;
 }
-
-section.endpoint-card table.param-table th~td {
-  padding-left: 0.5rem;
+section.endpoint-card table.param-table td:last-child {
+    width: 30%;
 }
-
 section.endpoint-card table.param-table td pre {
   display: inline-block;
+  white-space: pre-wrap;
+  font-size: 0.7rem;
+  vertical-align: middle;
+  line-height: 1.4rem;
 }
 
 section.endpoint-card h3 {
