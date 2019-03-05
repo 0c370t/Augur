@@ -52,6 +52,6 @@
       }
     ],
     "response":"Image file as response",
-    "error_format":"{\n\terror: Error Message,\n\tgiven_size: If invalid, returned for inspection\n}"
+    "error_format":"{\n\terror: Error Message,\n\tgiven_size: If invalid, returned for inspection\n\tdetected_extension: Returned if invalid extension was given\n}"
   }
 }
