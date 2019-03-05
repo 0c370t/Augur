@@ -40,21 +40,15 @@ def doc(requested_doc):
 
 @augur.route("/thumbnail", methods=["POST"])
 def debug_thumbnail():
-    if 'size' not in request.args and 'size' not in request.form:
-        output_size = 200
-    else:
-        if 'size' in request.args:
-            tempSize = request.args['size']
-        else:
-            tempSize = request.form['size']
-        try:
-            output_size = int(tempSize)
+    output_size = getArg(request,"size",200)
+    try:
+        output_size = int(output_size)
         except:
             if tempSize[-2:] == "px":
-                output_size = int(tempSize[:-2])
+            output_size = int(output_size[:-2])
             else:
                 raise InvalidRequest(
-                    "Invalid size parameter", given_size=tempSize)
+                "Invalid size parameter", given_size=output_size)
 
     image_data = getImageDataFromRequest(request)
     image_data['image'].thumbnail((output_size, output_size))
@@ -72,16 +66,24 @@ def error(error):
 
 # Helper Methods
 
+def getArg(request, arg, default):
+    if arg not in request.args and arg not in request.form:
+        return default
+    else:
+        if arg in request.args:
+            return request.args[arg]
+        else:
+            return request.form[arg]
 
-def sendImage(image_data):
+def sendImage(image_data, **kwargs):
     # Expects dict strucutre from getImageDataFromRequest()
-    imageAsFile = pilImageToFile(image_data['image'])
+    imageAsFile = pilImageToFile(image_data)
     return send_file(imageAsFile, as_attachment=True, attachment_filename=image_data['image_name'])
 
 
-def pilImageToFile(image):
+def pilImageToFile(image_data, **kwargs):
     imageIO = StringIO()
-    image.save(imageIO, 'JPEG', quality=70)
+    image_data['image'].save(imageIO, image_data['image_format'], **kwargs)
     imageIO.seek(0, 0)
     return imageIO
 
