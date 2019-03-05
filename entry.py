@@ -55,17 +55,21 @@ def debug_formData():
 
 @augur.route("/thumbnail", methods=["POST"])
 def debug_thumbnail():
-    if 'size' not in request.args:
+    if 'size' not in request.args and 'size' not in request.form:
         output_size = 200
     else:
+        if 'size' in request.args:
+            tempSize = request.args['size']
+        else:
+            tempSize = request.form['size']
         try:
-            output_size = int(request.args['size'])
+            output_size = int(tempSize)
         except:
-            if request.args['size'][-2:] == "px":
-                output_size = int(request.args['size'][:-2])
+            if tempSize[-2:] == "px":
+                output_size = int(tempSize[:-2])
             else:
                 raise InvalidRequest(
-                    "Invalid size parameter", given_size=request.args['size'])
+                    "Invalid size parameter", given_size=tempSize)
 
     image_data = getImageDataFromRequest(request)
     image_data['image'].thumbnail((output_size, output_size))
