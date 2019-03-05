@@ -1,0 +1,9 @@
+{
+  "POST":{
+    "output_format":{
+      "field":"output_format",
+      "desc":"Format of image to output",
+      "format":"Valid file extension for JPEG, BMP, GIF, or PNG files"
+    }
+  }, "GET":{}
+}

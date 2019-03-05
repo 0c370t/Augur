@@ -32,6 +32,24 @@
     </tr>
     {% endfor %}
   </table>
+  {% if global_params[endpoint.method]|length > 0 %}
+  <h3>Global Parameters</h3>
+  <table class="param-table">
+    <tr>
+      <th>Field</th>
+      <th>Description</th>
+      <th>Format</th>
+    </tr>
+    {% for parameter in global_params[endpoint.method] %}
+    {% set parameter = global_params[endpoint.method][parameter] %}
+    <tr>
+      <th>{{ parameter.field }}</th>
+      <td>{{ parameter.desc }}</td>
+      <td><pre>{{ parameter.format }}</pre></td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
   <h3>Examples</h3>
   {% for request in endpoint.example_requests %}
   <h4>{{ request.desc }}</h4>
