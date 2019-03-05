@@ -39,6 +39,11 @@
         "field":"size",
         "desc":"Size (in pixels) of largest edge of image to return",
         "format":"[0-9]+(px)?"
+      },
+      "output_format":{
+        "field":"output_format",
+        "desc":"Format of image to output",
+        "format":"Valid file extension for JPEG, BMP, GIF, or PNG files"
       }
     },
     "example_requests":[
@@ -52,6 +57,6 @@
       }
     ],
     "response":"Image file as response",
-    "error_format":"{\n\terror: Error Message,\n\tgiven_size: If invalid, returned for inspection\n}"
+    "error_format":"{\n\terror: Error Message,\n\tgiven_size: If invalid, returned for inspection\n\tdetected_extension: Returned if invalid extension was given\n}"
   }
 }
