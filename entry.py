@@ -2,8 +2,9 @@
 from flask import Flask, Blueprint, render_template, jsonify, request, Response, url_for, send_file
 from PIL import Image
 from StringIO import StringIO
-from errors import InvalidRequest
 import json
+import sys
+import os
 
 # Used if augur is to be a Blueprint
 # augur = Blueprint("augur", __name__,
@@ -13,6 +14,9 @@ import json
 augur = Flask(__name__, static_url_path="", static_folder="static")
 application = augur
 augur.secret_key = "EFF121E88B54D79A39CCF18E358BB"
+sys.path.insert(0, augur.root_path)
+os.chdir(augur.root_path)
+from errors import InvalidRequest
 
 # TODO: Make lookup function for matching image extension to image format (or just a dict)
 # TODO: Research other ways a file could be sent or referenced
