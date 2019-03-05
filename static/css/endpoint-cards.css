@@ -55,8 +55,17 @@ section.endpoint-card header pre {
 }
 
 section.endpoint-card table.param-table {
-  width: 100%;
+  width: calc(100% - 4rem);
+  border-collapse:collapse;
+  margin: 0 2rem;
 }
+section.endpoint-card table.param-table tr:first-child{
+  border-bottom: 1px solid #222;
+}
+section.endpoint-card table.param-table tr:nth-child(odd) {
+  background-color:#DDD;
+}
+
 
 section.endpoint-card table.param-table tr {
   height: 2rem;
@@ -68,8 +77,6 @@ section.endpoint-card table.param-table tr th:first-child {
   padding-right: 0.5rem;
   padding-left: 0;
   border-right: 1px solid #222;
-  /* Should force columns to fit content*/
-  width: 1rem;
 }
 
 section.endpoint-card table.param-table tr th {
