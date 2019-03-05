@@ -33,6 +33,14 @@ def index():
     return render_template("index.html.jinja", docs=endpoints)
 
 
+@augur.route("/doc/<string:requested_doc>", methods=["GET"])
+def doc(requested_doc):
+    if requested_doc in endpoints:
+        return jsonify(endpoints[requested_doc])
+    raise InvalidRequest(
+        "The endpoint you have requested does not exist!", endpoint=requested_doc)
+
+
 @augur.route("/debug/formData", methods=["POST"])
 def debug_formData():
     # Current intended functionality is returning the image that is sent as form data
