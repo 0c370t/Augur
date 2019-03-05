@@ -57,9 +57,10 @@ def debug_thumbnail():
 
 @augur.before_request
 def preprocessor():
-    request.image_data = getImageDataFromRequest(request)
-    format_conversion = getArg(request,'output_format',request.image_data['image_format'])
-    request.image_data['image_format'] = getFormatByExtension(format_conversion)
+    if request.method == "POST":
+        request.image_data = getImageDataFromRequest(request)
+        format_conversion = getArg(request,'output_format',request.image_data['image_format'])
+        request.image_data['image_format'] = getFormatByExtension(format_conversion)
 
 # Augur error handlers
 
