@@ -39,6 +39,11 @@
         "field":"size",
         "desc":"Size (in pixels) of largest edge of image to return",
         "format":"[0-9]+(px)?"
+      },
+      "output_format":{
+        "field":"output_format",
+        "desc":"Format of image to output",
+        "format":"Valid file extension for JPEG, BMP, GIF, or PNG files"
       }
     },
     "example_requests":[
