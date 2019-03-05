@@ -3,6 +3,8 @@ from flask import Flask, Blueprint, render_template, jsonify, request, Response,
 from PIL import Image
 from StringIO import StringIO
 from errors import InvalidRequest
+import json
+
 # Used if augur is to be a Blueprint
 # augur = Blueprint("augur", __name__,
 #                    template_folder = "templates",
@@ -17,13 +19,18 @@ augur.secret_key = "EFF121E88B54D79A39CCF18E358BB"
 # TODO  Download more ram
 # TODO: Make all GET requests direct to index (possibly to the section that has their intended endpoint)
 
+# Globals
+endpoints_raw = open("endpoints.json").read()
+endpoints = json.loads(endpoints_raw)
+
+
 # Augur Routes
 
 
 @augur.route("/")
 def index():
     # Displays an explanation of the API
-    return render_template("index.html.jinja")
+    return render_template("index.html.jinja", docs=endpoints)
 
 
 @augur.route("/debug/formData", methods=["POST"])

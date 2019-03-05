@@ -1,0 +1,32 @@
+{
+  "thumbnail" : {
+    "method" : "POST",
+    "title" : "Thumbnail",
+    "route" : "/thumbnail",
+    "description": "Used to get a thumbnail of the uploaded image, maintains aspect ratio, and will default to a max width or height of 200px (whichever is larger).",
+    "parameters":{
+      "file":{
+        "field":"file",
+        "desc":"Image File (with extension in filename)",
+        "format":""
+      },
+      "size":{
+        "field":"size",
+        "desc":"Size (in pixels) of largest edge of image to return",
+        "format":"[0-9]+(px)?"
+      }
+    },
+    "example_requests":[
+      {
+        "desc":"With size in URL",
+        "example":"curl 'https://augur.noimbrian.com/thumbnail?size=100px' -F 'file=@.../test_image.jpg' > image.jpg"
+      },
+      {
+        "desc":"With size in form data",
+        "example":"curl 'https://augur.noimbrian.com/thumbnail' -F 'file=@.../test_image.jpg' -F 'size=100px' > image.jpg"
+      }
+    ],
+    "response":"Image file as response",
+    "error_format":"{\n\terror: Error Message,\n\tgiven_size: If invalid, returned for inspection\n}"
+  }
+}

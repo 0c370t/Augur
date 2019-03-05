@@ -6,56 +6,41 @@
 
 
 {% block main %}
-<section class="endpoint-card request-POST">
+{% for endpoint in docs %}
+{% set endpoint = docs[endpoint] %}
+<section class="endpoint-card {% if endpoint.method == 'POST' %}request-POST {% elif endpoint.method == 'GET' %}request-GET{%endif%}">
   <header>
-    <h2>Thumbnail</h2>
-    <pre>/thumbnail</pre>
-    <p>Used to get a thumbnail of the uploaded image, maintains aspect ratio, and will default to a max width or height of 200px (whichever is larger).</p>
+    <h2>{{ endpoint.title }}</h2>
+    <pre>{{ endpoint.route }}</pre>
+    <p>
+      {{ endpoint.description }}
+    </p>
   </header>
   <h3>Parameters</h3>
   <table class="param-table">
     <tr>
-      <th>
-        Field
-      </th>
-      <th>
-        Description
-      </th>
-      <th>
-        Format
-      </th>
+      <th>Field</th>
+      <th>Description</th>
+      <th>Format</th>
     </tr>
+    {% for parameter in endpoint.parameters %}
+    {% set parameter = endpoint.parameters[parameter] %}
     <tr>
-      <th>
-        file
-      </th>
-      <td>
-        Image File (with extension in filename)
-      </td>
+      <th>{{ parameter.field }}</th>
+      <td>{{ parameter.desc }}</td>
+      <td><pre>{{ parameter.format }}</pre></td>
     </tr>
-    <tr>
-      <th>
-        size
-      </th>
-      <td>
-          Size (in pixels) of image to return
-      </td>
-      <td>
-        <pre>[0-9]+(px)?</pre>
-      </td>
-    </tr>
+    {% endfor %}
   </table>
   <h3>Example Request</h3>
-  <p>With size in URL</p>
-  <pre class="example">curl 'https://augur.noimbrian.com/thumbnail?size=100px' -F "file=@.../test_image.jpg" > image.jpg</pre>
-  <p>With size in form data</p>
-  <pre class="example">curl 'https://augur.noimbrian.com/thumbnail' -F "file=@.../test_image.jpg" -F "size=100px" > image.jpg</pre>
+  {% for request in endpoint.example_requests %}
+  <p>{{ request.desc }}</p>
+  <pre class="example">{{ request.example }}</pre>
+  {% endfor %}
   <h4>Response:</h4>
-  <p>Image file as response</p>
-  <h4>Error Format:</h4>
-  <pre class="example">{
-      error: Error Message,
-      given_size: If invalid, returned for inspection
-}</pre>
+  <pre class="example">{{ endpoint.response }}</pre>
+  <h4>Error Format</h4>
+  <pre class="example">{{ endpoint.error_format }}</pre>
 </section>
+{% endfor %}
 {% endblock %}
