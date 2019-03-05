@@ -32,12 +32,12 @@
     </tr>
     {% endfor %}
   </table>
-  <h3>Example Request</h3>
+  <h3>Examples</h3>
   {% for request in endpoint.example_requests %}
-  <p>{{ request.desc }}</p>
+  <h4>{{ request.desc }}</h4>
   <pre class="example">{{ request.example }}</pre>
   {% endfor %}
-  <h4>Response:</h4>
+  <h4>Response</h4>
   <pre class="example">{{ endpoint.response }}</pre>
   <h4>Error Format</h4>
   <pre class="example">{{ endpoint.error_format }}</pre>
