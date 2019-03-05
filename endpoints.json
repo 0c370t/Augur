@@ -1,4 +1,29 @@
 {
+  "doc" : {
+    "method" : "GET",
+    "title" : "Documentation",
+    "route" : "/doc/[endpoint]",
+    "description" : "Gives a json representation of documentation for specified endpoint",
+    "parameters":{
+      "endpoint":{
+        "field":"endpoint",
+        "desc":"Endpoint you want documentation for, matches route with stripped slashes",
+        "format":""
+      }
+    },
+    "example_requests":[
+      {
+        "desc":"Get Thumbnail documentation",
+        "example":"curl 'https://augur.noimbrian.com/doc/thumbnail'"
+      },
+      {
+        "desc":"Get doc documentation",
+        "example":"curl 'https://augur.noimbrian.com/doc/doc'"
+      }
+    ],
+    "response":"{\n\tmethod: GET|POST,\n\ttitle: Legible Title,\n\troute: Route to endpoint,\n\tdescription: Long-form description of endpoint functionality,\n\tparameters:{\n\t\tparameter_1:{\n\t\t\tfield: Expected field name in form or url,\n\t\t\tdesc: Description of expected content,\n\t\t\tformat: Regex or other expected format\n\t\t}, ...\n\t},\n\texample_requests:[\n\t\t{\n\t\t\tdesc: Description of what this command does,\n\t\t\texample: curl command that will call the endpoint\n\t\t}, ...\n\t],\n\tresponse: Structure of expected response (like this),\n\terror_format: Structure of generated errors\n}",
+    "error_format":"{\n\terror: Error Message,\n\tendpoint: The endpoint you tried to reach\n}"
+  },
   "thumbnail" : {
     "method" : "POST",
     "title" : "Thumbnail",
