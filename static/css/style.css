@@ -21,6 +21,13 @@ body {
 
 :root {
     font-family: sans-serif;
+    font-size: 12px;
+}
+/* Desktop */
+@media screen and (min-width:1025px) and (max-resolution: 143dpi){
+  :root{
+    font-size:18px;
+  }
 }
 
 /* Header Styles */
