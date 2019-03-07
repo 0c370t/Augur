@@ -49,7 +49,7 @@ section.endpoint-card header pre {
   border: 1px solid #ddd;
   font-family: monospace;
   font-size: .8rem;
-  line-height: .8rem;
+  line-height: 1.6rem;
   text-indent: 2rem;
   max-width: 100%;
 }
