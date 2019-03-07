@@ -44,12 +44,12 @@ section.endpoint-card header p {
 }
 
 section.endpoint-card header pre {
-  height: 1.6rem;
+  height: 2em;
   padding: 0.4rem 0;
   border: 1px solid #ddd;
   font-family: monospace;
   font-size: .8rem;
-  line-height: 1.6rem;
+  line-height: 1em;
   text-indent: 2rem;
   max-width: 100%;
 }

@@ -61,6 +61,9 @@ footer{
   text-align:center;
   border-top:1px solid #999;
   line-height:5vh;
+  font-size: .6rem;
+} footer > p{
+  line-height:1.2em;
 }
 
 /* Desktop */

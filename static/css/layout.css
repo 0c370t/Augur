@@ -84,8 +84,10 @@ main {
 
 /* Footer Styles */
 footer{
-  height:5vh;
+  padding: 1em 0;
+  min-height: 5vh;
   background-color:white;
+
 }
 /* Desktop */
 @media screen and (min-width:1025px) and (max-resolution: 143dpi) {
