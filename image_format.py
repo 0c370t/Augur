@@ -22,10 +22,7 @@ format_extension_map = {
 }
 
 valid_formats = format_extension_map.keys()
-valid_extensions = []
-for format in format_extension_map:
-    for extension in format_extension_map[format]:
-        valid_extensions += [extension]
+valid_extensions = [extension for format in valid_formats for extension in format_extension_map[format]]
 
 def getFormatByExtension(extension):
     extension = extension.split('.')[-1].lower()
