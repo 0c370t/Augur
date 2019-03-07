@@ -1,5 +1,5 @@
-{
-  "doc" : {
+[
+  {
     "method" : "GET",
     "title" : "Documentation",
     "route" : "/doc/[endpoint]",
@@ -23,10 +23,10 @@
     ],
     "response":"{\n\tmethod: GET|POST,\n\ttitle: Legible Title,\n\troute: Route to endpoint,\n\tdescription: Long-form description of endpoint functionality,\n\tparameters:{\n\t\tparameter_1:{\n\t\t\tfield: Expected field name in form or url,\n\t\t\tdesc: Description of expected content,\n\t\t\tformat: Regex or other expected format\n\t\t}, ...\n\t},\n  global_parameters:{ // Applicable to all endpoints with this method\n    global_parameter_1:{\n      field: Expected field name in form or url,\n      desc: Description of expected content,\n      format: Regex or other expected format\n    }\n  }\n\texample_requests:[\n\t\t{\n\t\t\tdesc: Description of what this command does,\n\t\t\texample: curl command that will call the endpoint\n\t\t}, ...\n\t],\n\tresponse: Structure of expected response (like this),\n\terror_format: Structure of generated errors\n}"
   },
-  "thumbnail" : {
+  {
     "method" : "POST",
     "title" : "Thumbnail",
-    "route" : "/thumbnail",
+    "route" : "/thumbnail/",
     "description": "Used to get a thumbnail of the uploaded image, maintains aspect ratio, and will default to a max width or height of 200px (whichever is larger).",
     "parameters":{
       "size":{
@@ -47,10 +47,10 @@
     ],
     "response":"Image file as response"
   },
-  "blur/gaussian" : {
+  {
     "method" : "POST",
     "title": "Gaussian Blur",
-    "route":" /blur/gaussian/",
+    "route":"/blur/gaussian/",
     "description": "Applies a gaussian blur to the image with a specified radius (defaults to 2)",
     "parameters":{
       "radius":{
@@ -69,10 +69,67 @@
         "example":"curl 'https://augut.noimbrian.com/blur/gaussian' -F 'file=@.../test_image.jpg' -F 'radius=10px' > image.jpg"
       }
     ],
-    "response":"Image file as response",
-    "error_format":"{\n\terror: Error Message,\n\tgiven_parameter: If invalid, returned for inspection,\n\tgiven_name: Name of invalid parameter\n\tdetected_extension: Returned if invalid extension was given\n}"
+    "response":"Image file as response"
   },
-  "fun/needsmore":{
+  {
+    "method":"POST",
+    "title":"Box Blur",
+    "route":"/blur/box/",
+    "description":"Applies a box blur to the image with a specified radius (defaults to 10)",
+    "parameters":{
+      "radius":{
+        "field":"radius",
+        "desc":"Severity of blur to apply in pixels",
+        "format":"[0-9]+(px)?"
+      }
+    },
+    "example_requests":[
+      {
+        "desc":"With Radius in URL",
+        "example":"curl 'https://augur.noimbrian.com/blur/box?radius=10px' -F 'file=@.../text_image.jpg' > image.jpg "
+      },
+      {
+        "desc":"With Radius in form data",
+        "example":"curl 'https://augut.noimbrian.com/blur/box' -F 'file=@.../test_image.jpg' -F 'radius=10px' > image.jpg"
+      }
+    ],
+    "response":"Image file as response"
+  },
+  {
+    "method":"POST",
+    "title":"Unsharp Mask",
+    "route":"/blur/unsharp/",
+    "description":"Applies an <a target='_blank' href='https://en.wikipedia.org/wiki/Unsharp_masking#Digital_unsharp_masking'>unsharp mask</a> to the image",
+    "parameters":{
+      "radius":{
+        "field":"radius",
+        "desc":"Size of edges to be enhanced",
+        "format":"[0-9]+(px)?"
+      },
+      "percent":{
+        "field":"percent",
+        "desc":"Contrast added to edge borders",
+        "format":"[0-9]+"
+      },
+      "threshold":{
+        "field":"threshold",
+        "desc":"Minimum Changes to make",
+        "format":"[0-9]+"
+      }
+    },
+    "example_requests":[
+      {
+        "desc":"Declaring all variables",
+        "example":"curl -v 'localhost:5000/blur/unsharp' -F 'radius=50px' -F 'threshold=1' -F 'percent=150'  -F 'file=https://i.imgur.com/RdScatd.jpg' -F 'output_format=png'"
+      },
+      {
+        "desc":"Declaring only radius",
+        "example":"curl -v 'localhost:5000/blur/unsharp' -F 'radius=50px' -F 'file=https://i.imgur.com/RdScatd.jpg' -F 'output_format=png'"
+      }
+    ],
+    "response":"Image file as response"
+  },
+  {
     "method":"POST",
     "title": "Needs More",
     "route":"/fun/needsmore/",
@@ -85,4 +142,4 @@
     ],
     "response":"Image file as response"
   }
-}
+]

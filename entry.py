@@ -9,6 +9,7 @@ import json
 import sys
 import os
 import random
+import re
 
 augur = Flask(__name__, static_url_path="", static_folder="static")
 application = augur
@@ -22,7 +23,8 @@ from image_format import getFormatByExtension, isValidExtension, getValidExtensi
 
 # Globals
 endpoints_raw = open("json/endpoints.json").read()
-endpoints = json.loads(endpoints_raw)
+endpoint_docs = json.loads(endpoints_raw)
+endpoint_routes = [re.sub('\[(\w+)\]','',endpoint['route']) for endpoint in endpoint_docs]
 global_parameters_raw = open("json/global_params.json").read()
 global_parameters = json.loads(global_parameters_raw)
 
@@ -31,18 +33,22 @@ global_parameters = json.loads(global_parameters_raw)
 @augur.route("/")
 def index():
     # Displays an explanation of the API
-    return render_template("index.html.jinja", docs=endpoints, global_params=global_parameters)
+    return render_template("index.html.jinja", docs=endpoint_docs, global_params=global_parameters)
 
 
 @augur.route("/doc/<path:requested_doc>", methods=["GET"])
 def doc(requested_doc):
+    # Force proper leading and trailing slashes
     while requested_doc[-1] == '/':
         requested_doc = requested_doc[:-1]
-
-    if requested_doc in endpoints:
-        doc = endpoints[requested_doc]
+    while requested_doc[0] == '/':
+        requested_doc = requested_doc[1:]
+    requested_doc = "/"+requested_doc+"/"
+    if requested_doc in endpoint_routes:
+        indexOfDoc = endpoint_routes.index(requested_doc)
+        doc = endpoint_docs[indexOfDoc]
         doc['global_parameters'] = global_parameters[doc['method']]
-        return jsonify(endpoints[requested_doc])
+        return jsonify(doc)
     raise InvalidRequest(
         "The endpoint you have requested does not exist!", endpoint=requested_doc)
 
@@ -64,6 +70,22 @@ def blur_gaussian():
 
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.GaussianBlur(radius))
 
+    return sendImage(request.image_data)
+
+@augur.route("/blur/box", methods=["POST"])
+def blur_box():
+    radius = getArg(request,"radius",2)
+    radius = getPixelValue(radius,"radius")
+    request.image_data['image'] = request.image_data['image'].filter(ImageFilter.BoxBlur(radius))
+    return sendImage(request.image_data)
+
+@augur.route("/blur/unsharp", methods=["POST"])
+def blur_unsharp():
+    radius = getArg(request,"radius",2)
+    radius = int(getPixelValue(radius,"radius"))
+    percent = getArg(request,"percent",150)
+    threshold = getArg(request,"threshold",3)
+    request.image_data['image'] = request.image_data['image'].filter(ImageFilter.UnsharpMask(radius, percent, threshold))
     return sendImage(request.image_data)
 
 @augur.route("/fun/needsmore", methods=["POST"])
