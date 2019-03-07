@@ -30,11 +30,6 @@
     "route" : "/thumbnail",
     "description": "Used to get a thumbnail of the uploaded image, maintains aspect ratio, and will default to a max width or height of 200px (whichever is larger).",
     "parameters":{
-      "file":{
-        "field":"file",
-        "desc":"Image File (with extension in filename)",
-        "format":""
-      },
       "size":{
         "field":"size",
         "desc":"Size (in pixels) of largest edge of image to return",

@@ -1,5 +1,10 @@
 {
   "POST":{
+    "file":{
+      "field":"file",
+      "desc":"Image File (with extension in filename)",
+      "format":""
+    },
     "output_format":{
       "field":"output_format",
       "desc":"Format of image to output",
