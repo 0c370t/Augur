@@ -9,6 +9,7 @@ import json
 import sys
 import os
 import random
+import re
 
 augur = Flask(__name__, static_url_path="", static_folder="static")
 application = augur
@@ -22,7 +23,8 @@ from image_format import getFormatByExtension, isValidExtension, getValidExtensi
 
 # Globals
 endpoints_raw = open("json/endpoints.json").read()
-endpoints = json.loads(endpoints_raw)
+endpoint_docs = json.loads(endpoints_raw)
+endpoint_routes = [re.sub('\[(\w+)\]','',endpoint['route']) for endpoint in endpoint_docs]
 global_parameters_raw = open("json/global_params.json").read()
 global_parameters = json.loads(global_parameters_raw)
 
@@ -31,18 +33,22 @@ global_parameters = json.loads(global_parameters_raw)
 @augur.route("/")
 def index():
     # Displays an explanation of the API
-    return render_template("index.html.jinja", docs=endpoints, global_params=global_parameters)
+    return render_template("index.html.jinja", docs=endpoint_docs, global_params=global_parameters)
 
 
 @augur.route("/doc/<path:requested_doc>", methods=["GET"])
 def doc(requested_doc):
+    # Force proper leading and trailing slashes
     while requested_doc[-1] == '/':
         requested_doc = requested_doc[:-1]
-
-    if requested_doc in endpoints:
-        doc = endpoints[requested_doc]
+    while requested_doc[0] == '/':
+        requested_doc = requested_doc[1:]
+    requested_doc = "/"+requested_doc+"/"
+    if requested_doc in endpoint_routes:
+        indexOfDoc = endpoint_routes.index(requested_doc)
+        doc = endpoint_docs[indexOfDoc]
         doc['global_parameters'] = global_parameters[doc['method']]
-        return jsonify(endpoints[requested_doc])
+        return jsonify(doc)
     raise InvalidRequest(
         "The endpoint you have requested does not exist!", endpoint=requested_doc)
 

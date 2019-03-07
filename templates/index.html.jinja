@@ -7,7 +7,6 @@
 
 {% block main %}
 {% for endpoint in docs %}
-{% set endpoint = docs[endpoint] %}
 <section class="endpoint-card {% if endpoint.method == 'POST' %}request-POST {% elif endpoint.method == 'GET' %}request-GET{%endif%}">
   <header>
     <h2>{{ endpoint.title }}</h2>

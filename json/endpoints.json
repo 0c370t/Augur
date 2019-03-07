@@ -1,5 +1,5 @@
-{
-  "doc" : {
+[
+  {
     "method" : "GET",
     "title" : "Documentation",
     "route" : "/doc/[endpoint]",
@@ -23,10 +23,10 @@
     ],
     "response":"{\n\tmethod: GET|POST,\n\ttitle: Legible Title,\n\troute: Route to endpoint,\n\tdescription: Long-form description of endpoint functionality,\n\tparameters:{\n\t\tparameter_1:{\n\t\t\tfield: Expected field name in form or url,\n\t\t\tdesc: Description of expected content,\n\t\t\tformat: Regex or other expected format\n\t\t}, ...\n\t},\n  global_parameters:{ // Applicable to all endpoints with this method\n    global_parameter_1:{\n      field: Expected field name in form or url,\n      desc: Description of expected content,\n      format: Regex or other expected format\n    }\n  }\n\texample_requests:[\n\t\t{\n\t\t\tdesc: Description of what this command does,\n\t\t\texample: curl command that will call the endpoint\n\t\t}, ...\n\t],\n\tresponse: Structure of expected response (like this),\n\terror_format: Structure of generated errors\n}"
   },
-  "thumbnail" : {
+  {
     "method" : "POST",
     "title" : "Thumbnail",
-    "route" : "/thumbnail",
+    "route" : "/thumbnail/",
     "description": "Used to get a thumbnail of the uploaded image, maintains aspect ratio, and will default to a max width or height of 200px (whichever is larger).",
     "parameters":{
       "size":{
@@ -47,10 +47,10 @@
     ],
     "response":"Image file as response"
   },
-  "blur/gaussian" : {
+  {
     "method" : "POST",
     "title": "Gaussian Blur",
-    "route":" /blur/gaussian/",
+    "route":"/blur/gaussian/",
     "description": "Applies a gaussian blur to the image with a specified radius (defaults to 2)",
     "parameters":{
       "radius":{
@@ -71,7 +71,7 @@
     ],
     "response":"Image file as response"
   },
-  "blur/box" :{
+  {
     "method":"POST",
     "title":"Box Blur",
     "route":"/blur/box/",
@@ -95,7 +95,7 @@
     ],
     "response":"Image file as response"
   },
-  "fun/needsmore":{
+  {
     "method":"POST",
     "title": "Needs More",
     "route":"/fun/needsmore/",
@@ -108,4 +108,4 @@
     ],
     "response":"Image file as response"
   }
-}
+]
