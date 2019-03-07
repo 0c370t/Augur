@@ -16,6 +16,7 @@
       {{ endpoint.description }}
     </p>
   </header>
+  {% if endpoint.parameters|length > 0 %}
   <h3>Parameters</h3>
   <table class="param-table">
     <tr>
@@ -32,6 +33,7 @@
     </tr>
     {% endfor %}
   </table>
+  {% endif %}
   {% if global_params[endpoint.method]|length > 0 %}
   <h3>Global Parameters</h3>
   <table class="param-table">
