@@ -82,8 +82,8 @@ def getPixelValue(value, name):
     try:
         return int(value)
     except:
-        if tempSize[-2:] == "px":
-            return int(output_size[:-2])
+        if value[-2:] == "px":
+            return int(value[:-2])
         else:
             raise InvalidRequest(
                 "Invalid parameter", given_value=value, parameter=name)
