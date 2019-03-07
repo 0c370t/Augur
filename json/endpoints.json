@@ -49,7 +49,7 @@
     "response":"Image file as response",
     "error_format":"{\n\terror: Error Message,\n\tgiven_parameter: If invalid, returned for inspection,\n\tgiven_name: Name of invalid parameter\n\tdetected_extension: Returned if invalid extension was given\n}"
   },
-  "blur_gaussian" : {
+  "blur/gaussian" : {
     "method" : "POST",
     "title": "Gaussian Blur",
     "route":" /blur/gaussian/",
