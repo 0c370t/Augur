@@ -44,14 +44,7 @@ def doc(requested_doc):
 @augur.route("/thumbnail", methods=["POST"])
 def debug_thumbnail():
     output_size = getArg(request,"size",200)
-    try:
-        output_size = int(output_size)
-    except:
-        if tempSize[-2:] == "px":
-            output_size = int(output_size[:-2])
-        else:
-            raise InvalidRequest(
-                "Invalid size parameter", given_size=output_size)
+    output_size = getPixelValue(output_size)
 
 
     request.image_data['image'].thumbnail((output_size, output_size))
@@ -84,6 +77,16 @@ def getArg(request, arg, default):
             return request.args[arg]
         else:
             return request.form[arg]
+
+def getPixelValue(value, name):
+    try:
+        return int(value)
+    except:
+        if tempSize[-2:] == "px":
+            return int(output_size[:-2])
+        else:
+            raise InvalidRequest(
+                "Invalid parameter", given_value=value, parameter=name)
 
 def sendImage(image_data, **kwargs):
     # Expects dict strucutre from getImageDataFromRequest()
