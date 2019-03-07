@@ -79,6 +79,15 @@ def blur_box():
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.BoxBlur(radius))
     return sendImage(request.image_data)
 
+@augur.route("/blur/unsharp", methods=["POST"])
+def blur_unsharp():
+    radius = getArg(request,"radius",2)
+    radius = int(getPixelValue(radius,"radius"))
+    percent = getArg(request,"percent",150)
+    threshold = getArg(request,"threshold",3)
+    request.image_data['image'] = request.image_data['image'].filter(ImageFilter.UnsharpMask(radius, percent, threshold))
+    return sendImage(request.image_data)
+
 @augur.route("/fun/needsmore", methods=["POST"])
 def fun_needsmore():
     temp_image_data = None

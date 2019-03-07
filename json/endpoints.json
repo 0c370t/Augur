@@ -97,6 +97,40 @@
   },
   {
     "method":"POST",
+    "title":"Unsharp Mask",
+    "route":"/blur/unsharp/",
+    "description":"Applies an <a target='_blank' href='https://en.wikipedia.org/wiki/Unsharp_masking#Digital_unsharp_masking'>unsharp mask</a> to the image",
+    "parameters":{
+      "radius":{
+        "field":"radius",
+        "desc":"Size of edges to be enhanced",
+        "format":"[0-9]+(px)?"
+      },
+      "percent":{
+        "field":"percent",
+        "desc":"Contrast added to edge borders",
+        "format":"[0-9]+"
+      },
+      "threshold":{
+        "field":"threshold",
+        "desc":"Minimum Changes to make",
+        "format":"[0-9]+"
+      }
+    },
+    "example_requests":[
+      {
+        "desc":"Declaring all variables",
+        "example":"curl -v 'localhost:5000/blur/unsharp' -F 'radius=50px' -F 'threshold=1' -F 'percent=150'  -F 'file=https://i.imgur.com/RdScatd.jpg' -F 'output_format=png'"
+      },
+      {
+        "desc":"Declaring only radius",
+        "example":"curl -v 'localhost:5000/blur/unsharp' -F 'radius=50px' -F 'file=https://i.imgur.com/RdScatd.jpg' -F 'output_format=png'"
+      }
+    ],
+    "response":"Image file as response"
+  },
+  {
+    "method":"POST",
     "title": "Needs More",
     "route":"/fun/needsmore/",
     "description":"JPEG-Ify's your image",
