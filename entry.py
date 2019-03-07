@@ -90,14 +90,14 @@ def blur_unsharp():
 
 @augur.route("/fun/needsmore", methods=["POST"])
 def fun_needsmore():
-    temp_image_data = None
+    temp_image_data = temp_image_data = {
+        'image' : request.image_data['image'],
+        'image_name' : request.image_data['image_name'].split('.')[0] + "." + "jpg",
+        'image_format' : "JPEG",
+        'image_extension' : "jpg"
+    }
     for i in range(random.randint(15,30)):
-        temp_image_data = {
-            'image' : request.image_data['image'],
-            'image_name' : request.image_data['image_name'].split('.')[0] + "." + "jpg",
-            'image_format' : "JPEG",
-            'image_extension' : "jpg"
-        }
+        temp_image_data['image'] = request.image_data['image']
         request.image_data['image'] = Image.open(pilImageToFile(temp_image_data, quality=random.randint(1,25)))
     return sendImage(temp_image_data)
 
