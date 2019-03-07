@@ -48,5 +48,30 @@
     ],
     "response":"Image file as response",
     "error_format":"{\n\terror: Error Message,\n\tgiven_parameter: If invalid, returned for inspection,\n\tgiven_name: Name of invalid parameter\n\tdetected_extension: Returned if invalid extension was given\n}"
+  },
+  "blur_gaussian" : {
+    "method" : "POST",
+    "title": "Gaussian Blur",
+    "route":" /blur/gaussian/",
+    "description": "Applies a gaussian blur to the image with a specified radius (defaults to 2)",
+    "parameters":{
+      "radius":{
+        "field":"radius",
+        "desc":"Severity of blur to apply in pixels",
+        "format":"[0-9]+(px)?"
+      }
+    },
+    "example_requests":[
+      {
+        "desc":"With Radius in URL",
+        "example":"curl 'https://augur.noimbrian.com/blur/gaussian?radius=10px' -F 'file=@.../text_image.jpg' > image.jpg "
+      },
+      {
+        "desc":"With Radius in form data",
+        "example":"curl 'https://augut.noimbrian.com/blur/gaussian' -F 'file=@.../test_image.jpg' -F 'radius=10px' > image.jpg"
+      }
+    ],
+    "response":"Image file as response",
+    "error_format":"{\n\terror: Error Message,\n\tgiven_parameter: If invalid, returned for inspection,\n\tgiven_name: Name of invalid parameter\n\tdetected_extension: Returned if invalid extension was given\n}"
   }
 }
