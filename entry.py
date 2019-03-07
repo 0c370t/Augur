@@ -69,7 +69,7 @@ def blur_gaussian():
 @augur.route("/fun/needsmore", methods=["POST"])
 def fun_needsmore():
     temp_image_data = None
-    for i in range(random.randint(1,30)):
+    for i in range(random.randint(15,30)):
         temp_image_data = {
             'image' : request.image_data['image'],
             'image_name' : request.image_data['image_name'].split('.')[0] + "." + "jpg",

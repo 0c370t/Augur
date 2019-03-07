@@ -74,7 +74,7 @@
   },
   "fun/needsmore":{
     "method":"POST",
-    "title": "Needs More!",
+    "title": "Needs More",
     "route":"/fun/needsmore/",
     "description":"JPEG-Ify's your image",
     "example_requests":[
