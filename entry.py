@@ -8,6 +8,7 @@ import requests
 import json
 import sys
 import os
+import random
 
 augur = Flask(__name__, static_url_path="", static_folder="static")
 application = augur
@@ -15,7 +16,7 @@ augur.secret_key = "EFF121E88B54D79A39CCF18E358BB"
 sys.path.insert(0, augur.root_path)
 os.chdir(augur.root_path)
 from errors import InvalidRequest
-from image_format import getFormatByExtension, isValidExtension, getValidExtensions
+from image_format import getFormatByExtension, isValidExtension, getValidExtensions, getExtensionByFormat
 # TODO: Research other ways a file could be sent or referenced
 # TODO  Download more ram
 
@@ -64,6 +65,19 @@ def blur_gaussian():
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.GaussianBlur(radius))
 
     return sendImage(request.image_data)
+
+@augur.route("/fun/needsmore", methods=["POST"])
+def fun_needsmore():
+    temp_image_data = None
+    for i in range(random.randint(1,30)):
+        temp_image_data = {
+            'image' : request.image_data['image'],
+            'image_name' : request.image_data['image_name'].split('.')[0] + "." + "jpg",
+            'image_format' : "JPEG",
+            'image_extension' : "jpg"
+        }
+        request.image_data['image'] = Image.open(pilImageToFile(temp_image_data, quality=random.randint(1,25)))
+    return sendImage(temp_image_data)
 
 # Augur Utility Funtions
 
