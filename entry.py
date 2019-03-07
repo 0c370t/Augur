@@ -15,7 +15,7 @@ augur.secret_key = "EFF121E88B54D79A39CCF18E358BB"
 sys.path.insert(0, augur.root_path)
 os.chdir(augur.root_path)
 from errors import InvalidRequest
-from image_format import getFormatByExtension
+from image_format import getFormatByExtension, isValidExtension, getValidExtensions
 # TODO: Research other ways a file could be sent or referenced
 # TODO  Download more ram
 
@@ -135,15 +135,20 @@ def getImageDataFromRequest(request):
     else:
         fileURL = getArg(request,'file','')
         if isinstance(fileURL, basestring) and fileURL[:4] == "http":
-            # Make Request
-            response = requests.get(fileURL)
-            imageObject = Image.open(BytesIO(response.content))
-            imageName = fileURL.split('/')[-1]
-            return {
-                'image': imageObject,
-                'image_name': imageName,
-                'image_format': getFormatByExtension(imageName),
-                'image_extension': "." + imageName.split(".")[-1]
-            }
+            # Ensure it points to an image file
+            image_extension = fileURL.split(".")[-1]
+            if isValidExtension(image_extension):
+                # Make Request
+                response = requests.get(fileURL)
+                imageObject = Image.open(BytesIO(response.content))
+                imageName = fileURL.split('/')[-1]
+                return {
+                    'image': imageObject,
+                    'image_name': imageName,
+                    'image_format': getFormatByExtension(imageName),
+                    'image_extension': "." + imageName.split(".")[-1]
+                }
+            else:
+                raise InvalidRequest("Invalid File Extension! (Must be one of %s)" % getValidExtensions())
         else:
             raise InvalidRequest("Invalid File Type! (Files can be attached directly, or given as a url)")

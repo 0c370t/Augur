@@ -33,6 +33,14 @@ def getFormatByExtension(extension):
             return format
     raise InvalidRequest("Invalid extension!", detected_extension=extenstion)
 
+def isValidExtension(extension):
+    # Cleaning extension (Could be a filename that is being passed as well)
+    extension = extension.split('.')[-1].lower()
+    return extension in valid_extensions
+
+def getValidExtensions():
+    return valid_extensions
+
 def getExtensionByFormat(format):
     if format not in valid_formats:
         return -1
