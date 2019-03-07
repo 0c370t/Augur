@@ -31,22 +31,31 @@ body > header .text-wrapper {
   display: flex;
   justify-content: space-around;
   flex-direction: column;
-  width:100%;
-  text-align:center;
+  width: 50%;
+  text-align:right;
+  float:left;
 }
 
 body > header .image-wrapper {
     height: 15vh;
-    width:100%;
+    width: 45%;
+    float:right;
 }
 
 body > header .image-wrapper img {
 	display:block;
-    max-height: 15vh;
-    top: 50%;
-    position: relative;
-    transform: translateY(-50%);
-    margin: 0 auto;
+	max-height: 15vh;
+	height: 10vh;
+	top: 50%;
+	position: relative;
+	transform: translateY(-50%);
+	/* margin: 0 auto; */
+}
+
+body > header .subheading {
+	clear: both;
+	margin: 0 auto;
+	padding: 1rem 2rem;
 }
 
 /* Desktop */
@@ -66,6 +75,7 @@ body > header .image-wrapper img {
 	padding-right: 2rem;
   } body > header .image-wrapper img{
   	margin: 0;
+  	height:15vh;
   }
 }
 

@@ -36,11 +36,14 @@ body > header{
   background-color:white;
 }
 body > header .text-wrapper{
-    padding:2rem;
+    padding: 1rem 0;
 }
 /* Desktop */
 @media screen and (min-width:1025px) and (max-resolution: 143dpi){
   body > header{
+  }
+  body > header .text-wrapper{
+    padding:2rem;
   }
 }
 
