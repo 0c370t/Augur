@@ -41,15 +41,18 @@ def doc(requested_doc):
     raise InvalidRequest(
         "The endpoint you have requested does not exist!", endpoint=requested_doc)
 
-@augur.route("/thumbnail", methods=["POST"])
-def debug_thumbnail():
-    output_size = getArg(request,"size",200)
-    output_size = getPixelValue(output_size)
+# Augur POST Endpoints
 
+@augur.route("/thumbnail", methods=["POST"])
+def thumbnail():
+    output_size = getArg(request,"size",200)
+    output_size = getPixelValue(output_size,'size')
 
     request.image_data['image'].thumbnail((output_size, output_size))
 
     return sendImage(request.image_data)
+
+# Augur Utility Funtions
 
 @augur.before_request
 def preprocessor():
