@@ -66,6 +66,13 @@ def blur_gaussian():
 
     return sendImage(request.image_data)
 
+@augur.route("/blur/box", methods=["POST"])
+def blur_box():
+    radius = getArg(request,"radius",2)
+    radius = getPixelValue(radius,"radius")
+    request.image_data['image'] = request.image_data['image'].filter(ImageFilter.BoxBlur(radius))
+    return sendImage(request.image_data)
+
 @augur.route("/fun/needsmore", methods=["POST"])
 def fun_needsmore():
     temp_image_data = None
