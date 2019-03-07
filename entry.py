@@ -54,8 +54,8 @@ def thumbnail():
     return sendImage(request.image_data)
 
 @augur.route("/blur/gaussian", methods=["POST"])
-def blur_gaussian(radius):
-    radius = getArg(request,"radius",radius)
+def blur_gaussian():
+    radius = getArg(request,"radius",2)
     radius = getPixelValue(radius,"radius")
 
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.GaussianBlur(radius))
