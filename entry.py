@@ -44,11 +44,15 @@ def doc(requested_doc):
     while requested_doc[0] == '/':
         requested_doc = requested_doc[1:]
     requested_doc = "/"+requested_doc+"/"
+
+
     if requested_doc in endpoint_routes:
         indexOfDoc = endpoint_routes.index(requested_doc)
         doc = endpoint_docs[indexOfDoc]
+        # Add Global Parameters
         doc['global_parameters'] = global_parameters[doc['method']]
         return jsonify(doc)
+    # User asked for invalid endpoint
     raise InvalidRequest(
         "The endpoint you have requested does not exist!", endpoint=requested_doc)
 
@@ -76,6 +80,7 @@ def blur_gaussian():
 def blur_box():
     radius = getArg(request,"radius",2)
     radius = getPixelValue(radius,"radius")
+
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.BoxBlur(radius))
     return sendImage(request.image_data)
 
@@ -85,17 +90,21 @@ def blur_unsharp():
     radius = int(getPixelValue(radius,"radius"))
     percent = getArg(request,"percent",150)
     threshold = getArg(request,"threshold",3)
+
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.UnsharpMask(radius, percent, threshold))
     return sendImage(request.image_data)
 
 @augur.route("/fun/needsmore", methods=["POST"])
 def fun_needsmore():
+    # Created so we can iterate non-destructively
     temp_image_data = temp_image_data = {
         'image' : request.image_data['image'],
         'image_name' : request.image_data['image_name'].split('.')[0] + "." + "jpg",
         'image_format' : "JPEG",
         'image_extension' : "jpg"
     }
+    # Create 15-30 new images compressing each time
+    # This is a very destructive operation
     for i in range(random.randint(15,30)):
         temp_image_data['image'] = request.image_data['image']
         request.image_data['image'] = Image.open(pilImageToFile(temp_image_data, quality=random.randint(1,25)))
@@ -106,6 +115,8 @@ def fun_needsmore():
 @augur.before_request
 def preprocessor():
     if request.method == "POST":
+        # Populate image_data based on attachment
+        # This is done for every endpoint (because they all have images, duh)
         request.image_data = getImageDataFromRequest(request)
         format_conversion = getArg(request,'output_format',request.image_data['image_format'])
         request.image_data['image_format'] = getFormatByExtension(format_conversion)
@@ -115,6 +126,7 @@ def preprocessor():
 
 @augur.errorhandler(InvalidRequest)
 def error(error):
+    # Just a more semantic exception
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
@@ -122,6 +134,9 @@ def error(error):
 # Helper Methods
 
 def getArg(request, arg, default):
+    # Gets argument from whichever method is was sent
+    # Also typecasts to the default's type so
+    # Calling function can assume it's type safely
     if arg not in request.args and arg not in request.form:
         return default
     else:
@@ -134,6 +149,8 @@ def getArg(request, arg, default):
             raise InvalidRequest("Parameter %s was given with invalid format! (Default for parameter is %s)" % (arg,default))
 
 def getPixelValue(value, name):
+    # Takes either string or integer
+    # Returns integer, will remove trailing px from string, or give error
     try:
         return int(value)
     except:
@@ -145,11 +162,15 @@ def getPixelValue(value, name):
 
 def sendImage(image_data, **kwargs):
     # Expects dict strucutre from getImageDataFromRequest()
+    # Converts image to sendable file and returns it
+    # Used for semantics and legibility in calling functions
     imageAsFile = pilImageToFile(image_data, **kwargs)
     return send_file(imageAsFile, as_attachment=True, attachment_filename=image_data['image_name'])
 
 
 def pilImageToFile(image_data, **kwargs):
+    # Converts PIL.Image to StringIO which can be sent over HTTP safely
+    # **kwargs are used when image format options are required
     imageIO = StringIO()
     image_data['image'].save(imageIO, image_data['image_format'], **kwargs)
     imageIO.seek(0, 0)
@@ -162,8 +183,10 @@ def getImageDataFromRequest(request):
     if 'file' not in request.files and 'file' not in request.form and 'file' not in request.args:
         raise InvalidRequest(
             "No file detected in request (It should be attached with name file)")
+    # If file is a file, not a URL
     if 'file' in request.files:
         image = request.files['file']
+        # Do things the easy way
         imageObject = Image.open(image)
         return {
             'image': imageObject,
@@ -172,7 +195,10 @@ def getImageDataFromRequest(request):
             'image_extension': "." + image.filename.split('.')[-1]
         }
     else:
+        # File is given as a url "remote"
+        # Get URL
         fileURL = getArg(request,'file','')
+        # Ensure URL is a URL
         if isinstance(fileURL, basestring) and fileURL[:4] == "http":
             # Ensure it points to an image file
             image_extension = fileURL.split(".")[-1]
