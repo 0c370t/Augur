@@ -13,7 +13,6 @@ sys.path.insert(0, augur.root_path)
 os.chdir(augur.root_path)
 from errors import InvalidRequest
 from image_format import getFormatByExtension
-# TODO: Make lookup function for matching image extension to image format (or just a dict)
 # TODO: Research other ways a file could be sent or referenced
 # TODO  Download more ram
 
