@@ -106,7 +106,7 @@ def getPixelValue(value, name):
 
 def sendImage(image_data, **kwargs):
     # Expects dict strucutre from getImageDataFromRequest()
-    imageAsFile = pilImageToFile(image_data)
+    imageAsFile = pilImageToFile(image_data, **kwargs)
     return send_file(imageAsFile, as_attachment=True, attachment_filename=image_data['image_name'])
 
 
