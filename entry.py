@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 from flask import Flask, Blueprint, render_template, jsonify, request, Response, url_for, send_file
-from PIL import Image
+from PIL import Image, ImageFilter
 from StringIO import StringIO
 import json
 import sys
@@ -32,8 +32,11 @@ def index():
     return render_template("index.html.jinja", docs=endpoints, global_params=global_parameters)
 
 
-@augur.route("/doc/<string:requested_doc>", methods=["GET"])
+@augur.route("/doc/<path:requested_doc>", methods=["GET"])
 def doc(requested_doc):
+    while requested_doc[-1] == '/':
+        requested_doc = requested_doc[:-1]
+
     if requested_doc in endpoints:
         doc = endpoints[requested_doc]
         doc['global_parameters'] = global_parameters[doc['method']]
@@ -41,22 +44,28 @@ def doc(requested_doc):
     raise InvalidRequest(
         "The endpoint you have requested does not exist!", endpoint=requested_doc)
 
-@augur.route("/thumbnail", methods=["POST"])
-def debug_thumbnail():
-    output_size = getArg(request,"size",200)
-    try:
-        output_size = int(output_size)
-    except:
-        if tempSize[-2:] == "px":
-            output_size = int(output_size[:-2])
-        else:
-            raise InvalidRequest(
-                "Invalid size parameter", given_size=output_size)
+# Augur POST Endpoints
 
+@augur.route("/thumbnail", methods=["POST"])
+def thumbnail():
+    output_size = getArg(request,"size",200)
+    output_size = getPixelValue(output_size,'size')
 
     request.image_data['image'].thumbnail((output_size, output_size))
 
     return sendImage(request.image_data)
+
+@augur.route("/blur/gaussian", methods=["POST"], defaults={'radius':'2'})
+@augur.route("/blur/gaussian/<string:radius>", methods=["POST"])
+def blur_gaussian(radius):
+    radius = getArg(request,"radius",radius)
+    radius = getPixelValue(radius,"radius")
+
+    request.image_data['image'] = request.image_data['image'].filter(ImageFilter.GaussianBlur(radius))
+
+    return sendImage(request.image_data)
+
+# Augur Utility Funtions
 
 @augur.before_request
 def preprocessor():
@@ -84,6 +93,16 @@ def getArg(request, arg, default):
             return request.args[arg]
         else:
             return request.form[arg]
+
+def getPixelValue(value, name):
+    try:
+        return int(value)
+    except:
+        if value[-2:] == "px":
+            return int(value[:-2])
+        else:
+            raise InvalidRequest(
+                "Invalid parameter", given_value=value, parameter=name)
 
 def sendImage(image_data, **kwargs):
     # Expects dict strucutre from getImageDataFromRequest()
