@@ -2,6 +2,9 @@
 from flask import Flask, Blueprint, render_template, jsonify, request, Response, url_for, send_file
 from PIL import Image, ImageFilter
 from StringIO import StringIO
+from io import BytesIO
+import werkzeug
+import requests
 import json
 import sys
 import os
@@ -117,15 +120,30 @@ def pilImageToFile(image_data, **kwargs):
 def getImageDataFromRequest(request):
     # This method will be expanded to include other ways of including a file, rather than just including it in the initial request (such as a url to get the image from)
     # Ensure file actually exists
-    if 'file' not in request.files:
+    if 'file' not in request.files and 'file' not in request.form and 'file' not in request.args:
         raise InvalidRequest(
             "No file detected in request (It should be attached with name file)")
-    image = request.files['file']
-    newImage = Image.open(image)
-    out = {
-        'image': newImage,
-        'image_name': image.filename,
-        'image_format': getFormatByExtension(image.filename),
-        'image_extension': "." + image.filename.split('.')[-1]
-    }
-    return out
+    if 'file' in request.files:
+        image = request.files['file']
+        imageObject = Image.open(image)
+        return {
+            'image': imageObject,
+            'image_name': image.filename,
+            'image_format': getFormatByExtension(image.filename),
+            'image_extension': "." + image.filename.split('.')[-1]
+        }
+    else:
+        fileURL = getArg(request,'file','')
+        if isinstance(fileURL, basestring) and fileURL[:4] == "http":
+            # Make Request
+            response = requests.get(fileURL)
+            imageObject = Image.open(BytesIO(response.content))
+            imageName = fileURL.split('/')[-1]
+            return {
+                'image': imageObject,
+                'image_name': imageName,
+                'image_format': getFormatByExtension(imageName),
+                'image_extension': "." + imageName.split(".")[-1]
+            }
+        else:
+            raise InvalidRequest("Invalid File Type! (Files can be attached directly, or given as a url)")
