@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 from flask import Flask, Blueprint, render_template, jsonify, request, Response, url_for, send_file
-from PIL import Image
+from PIL import Image, ImageFilter
 from StringIO import StringIO
 import json
 import sys
@@ -49,6 +49,16 @@ def thumbnail():
     output_size = getPixelValue(output_size,'size')
 
     request.image_data['image'].thumbnail((output_size, output_size))
+
+    return sendImage(request.image_data)
+
+@augur.route("/blur/gaussian", methods=["POST"], defaults={'radius':'2'})
+@augur.route("/blur/gaussian/<string:radius>", methods=["POST"])
+def blur_gaussian(radius):
+    radius = getArg(request,"radius",radius)
+    radius = getPixelValue(radius,"radius")
+
+    request.image_data['image'] = request.image_data['image'].filter(ImageFilter.GaussianBlur(radius))
 
     return sendImage(request.image_data)
 
