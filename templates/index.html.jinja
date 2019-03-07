@@ -12,7 +12,7 @@
     <h2>{{ endpoint.title }}</h2>
     <pre>{{ endpoint.route }}</pre>
     <p>
-      {{ endpoint.description }}
+      {{ endpoint.description|safe }}
     </p>
   </header>
   {% if endpoint.parameters|length > 0 %}
