@@ -71,5 +71,18 @@
     ],
     "response":"Image file as response",
     "error_format":"{\n\terror: Error Message,\n\tgiven_parameter: If invalid, returned for inspection,\n\tgiven_name: Name of invalid parameter\n\tdetected_extension: Returned if invalid extension was given\n}"
+  },
+  "fun/needsmore":{
+    "method":"POST",
+    "title": "Needs More!",
+    "route":"/fun/needsmore/",
+    "description":"JPEG-Ify's your image",
+    "example_requests":[
+      {
+        "desc":"Using Remote File",
+        "example":"curl 'https://augur.noimbrian.com/fun/jpgify' -F 'file=https://i.imgur.com/wDR39GE.jpg'"
+      }
+    ],
+    "response":"Image file as response"
   }
 }
