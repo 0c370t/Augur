@@ -2,6 +2,9 @@
 from flask import Flask, Blueprint, render_template, jsonify, request, Response, url_for, send_file
 from PIL import Image, ImageFilter
 from StringIO import StringIO
+from io import BytesIO
+import werkzeug
+import requests
 import json
 import sys
 import os
@@ -12,8 +15,7 @@ augur.secret_key = "EFF121E88B54D79A39CCF18E358BB"
 sys.path.insert(0, augur.root_path)
 os.chdir(augur.root_path)
 from errors import InvalidRequest
-from image_format import getFormatByExtension
-# TODO: Make lookup function for matching image extension to image format (or just a dict)
+from image_format import getFormatByExtension, isValidExtension, getValidExtensions
 # TODO: Research other ways a file could be sent or referenced
 # TODO  Download more ram
 
@@ -55,8 +57,8 @@ def thumbnail():
     return sendImage(request.image_data)
 
 @augur.route("/blur/gaussian", methods=["POST"])
-def blur_gaussian(radius):
-    radius = getArg(request,"radius",radius)
+def blur_gaussian():
+    radius = getArg(request,"radius",2)
     radius = getPixelValue(radius,"radius")
 
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.GaussianBlur(radius))
@@ -104,7 +106,7 @@ def getPixelValue(value, name):
 
 def sendImage(image_data, **kwargs):
     # Expects dict strucutre from getImageDataFromRequest()
-    imageAsFile = pilImageToFile(image_data)
+    imageAsFile = pilImageToFile(image_data, **kwargs)
     return send_file(imageAsFile, as_attachment=True, attachment_filename=image_data['image_name'])
 
 
@@ -118,15 +120,35 @@ def pilImageToFile(image_data, **kwargs):
 def getImageDataFromRequest(request):
     # This method will be expanded to include other ways of including a file, rather than just including it in the initial request (such as a url to get the image from)
     # Ensure file actually exists
-    if 'file' not in request.files:
+    if 'file' not in request.files and 'file' not in request.form and 'file' not in request.args:
         raise InvalidRequest(
             "No file detected in request (It should be attached with name file)")
-    image = request.files['file']
-    newImage = Image.open(image)
-    out = {
-        'image': newImage,
-        'image_name': image.filename,
-        'image_format': getFormatByExtension(image.filename),
-        'image_extension': "." + image.filename.split('.')[-1]
-    }
-    return out
+    if 'file' in request.files:
+        image = request.files['file']
+        imageObject = Image.open(image)
+        return {
+            'image': imageObject,
+            'image_name': image.filename,
+            'image_format': getFormatByExtension(image.filename),
+            'image_extension': "." + image.filename.split('.')[-1]
+        }
+    else:
+        fileURL = getArg(request,'file','')
+        if isinstance(fileURL, basestring) and fileURL[:4] == "http":
+            # Ensure it points to an image file
+            image_extension = fileURL.split(".")[-1]
+            if isValidExtension(image_extension):
+                # Make Request
+                response = requests.get(fileURL)
+                imageObject = Image.open(BytesIO(response.content))
+                imageName = fileURL.split('/')[-1]
+                return {
+                    'image': imageObject,
+                    'image_name': imageName,
+                    'image_format': getFormatByExtension(imageName),
+                    'image_extension': "." + imageName.split(".")[-1]
+                }
+            else:
+                raise InvalidRequest("Invalid File Extension! (Must be one of %s)" % getValidExtensions())
+        else:
+            raise InvalidRequest("Invalid File Type! (Files can be attached directly, or given as a url)")
