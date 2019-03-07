@@ -32,8 +32,11 @@ def index():
     return render_template("index.html.jinja", docs=endpoints, global_params=global_parameters)
 
 
-@augur.route("/doc/<string:requested_doc>", methods=["GET"])
+@augur.route("/doc/<path:requested_doc>", methods=["GET"])
 def doc(requested_doc):
+    while requested_doc[-1] == '/':
+        requested_doc = requested_doc[:-1]
+
     if requested_doc in endpoints:
         doc = endpoints[requested_doc]
         doc['global_parameters'] = global_parameters[doc['method']]
