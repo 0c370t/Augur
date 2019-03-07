@@ -25,7 +25,6 @@ global_parameters = json.loads(global_parameters_raw)
 
 # Augur Routes
 
-
 @augur.route("/")
 def index():
     # Displays an explanation of the API
@@ -55,8 +54,7 @@ def thumbnail():
 
     return sendImage(request.image_data)
 
-@augur.route("/blur/gaussian", methods=["POST"], defaults={'radius':'2'})
-@augur.route("/blur/gaussian/<string:radius>", methods=["POST"])
+@augur.route("/blur/gaussian", methods=["POST"])
 def blur_gaussian(radius):
     radius = getArg(request,"radius",radius)
     radius = getPixelValue(radius,"radius")
