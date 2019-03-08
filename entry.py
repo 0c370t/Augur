@@ -1,9 +1,8 @@
 #!/usr/bin/python2.7
-from flask import Flask, Blueprint, render_template, jsonify, request, Response, url_for, send_file
+from flask import Flask, render_template, jsonify, request, send_file
 from PIL import Image, ImageFilter
 from StringIO import StringIO
 from io import BytesIO
-import werkzeug
 import requests
 import json
 import sys
@@ -13,6 +12,7 @@ import re
 
 augur = Flask(__name__, static_url_path="", static_folder="static")
 application = augur
+# Jokes on you there aren't sessions in this app
 augur.secret_key = "EFF121E88B54D79A39CCF18E358BB"
 sys.path.insert(0, augur.root_path)
 os.chdir(augur.root_path)
