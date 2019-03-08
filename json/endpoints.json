@@ -137,7 +137,7 @@
     "example_requests":[
       {
         "desc":"Using Remote File",
-        "example":"curl 'https://augur.noimbrian.com/fun/jpgify' -F 'file=https://i.imgur.com/wDR39GE.jpg'"
+        "example":"curl 'https://augur.noimbrian.com/fun/needsmore' -F 'file=https://i.imgur.com/wDR39GE.jpg'"
       }
     ],
     "response":"Image file as response"
