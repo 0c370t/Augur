@@ -66,7 +66,7 @@
       },
       {
         "desc":"With Radius in form data",
-        "example":"curl 'https://augut.noimbrian.com/blur/gaussian' -F 'file=@.../test_image.jpg' -F 'radius=10px' > image.jpg"
+        "example":"curl 'https://augur.noimbrian.com/blur/gaussian' -F 'file=@.../test_image.jpg' -F 'radius=10px' > image.jpg"
       }
     ],
     "response":"Image file as response"
@@ -90,7 +90,7 @@
       },
       {
         "desc":"With Radius in form data",
-        "example":"curl 'https://augut.noimbrian.com/blur/box' -F 'file=@.../test_image.jpg' -F 'radius=10px' > image.jpg"
+        "example":"curl 'https://augur.noimbrian.com/blur/box' -F 'file=@.../test_image.jpg' -F 'radius=10px' > image.jpg"
       }
     ],
     "response":"Image file as response"
