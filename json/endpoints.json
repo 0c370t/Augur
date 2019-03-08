@@ -120,11 +120,11 @@
     "example_requests":[
       {
         "desc":"Declaring all variables",
-        "example":"curl -v 'localhost:5000/blur/unsharp' -F 'radius=50px' -F 'threshold=1' -F 'percent=150'  -F 'file=https://i.imgur.com/RdScatd.jpg' -F 'output_format=png'"
+        "example":"curl -v 'https://augur.noimbrian.com/blur/unsharp' -F 'radius=50px' -F 'threshold=1' -F 'percent=150'  -F 'file=https://i.imgur.com/RdScatd.jpg' -F 'output_format=png'"
       },
       {
         "desc":"Declaring only radius",
-        "example":"curl -v 'localhost:5000/blur/unsharp' -F 'radius=50px' -F 'file=https://i.imgur.com/RdScatd.jpg' -F 'output_format=png'"
+        "example":"curl -v 'https://augur.noimbrian.com/blur/unsharp' -F 'radius=50px' -F 'file=https://i.imgur.com/RdScatd.jpg' -F 'output_format=png'"
       }
     ],
     "response":"Image file as response"
