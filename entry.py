@@ -70,6 +70,8 @@ def thumbnail():
 
     return sendImage(request.image_data)
 
+# Blur endpoints
+
 @augur.route("/blur/gaussian", methods=["POST"])
 def blur_gaussian():
     radius = getArg(request,"radius",2)
@@ -96,6 +98,10 @@ def blur_unsharp():
 
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.UnsharpMask(radius, percent, threshold))
     return sendImage(request.image_data)
+
+
+
+# Fun endpoints
 
 @augur.route("/fun/needsmore", methods=["POST"])
 def fun_needsmore():
