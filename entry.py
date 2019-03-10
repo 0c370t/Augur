@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 from flask import Flask, render_template, jsonify, request, send_file, url_for
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageChops, ImageEnhance
 from StringIO import StringIO
 from io import BytesIO
 import requests
@@ -9,6 +9,8 @@ import sys
 import os
 import random
 import re
+import copy
+import math
 
 augur = Flask(__name__, static_url_path="", static_folder="static")
 application = augur
@@ -95,6 +97,54 @@ def blur_unsharp():
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.UnsharpMask(radius, percent, threshold))
     return sendImage(request.image_data)
 
+# Chop Endpoints
+@augur.route("/chops/offset", methods=["POST"])
+def chops_offest():
+    if getArg(request,"center",False):
+        (offsetX,offsetY) = request.image_data['image'].size
+        offsetX /= 2
+        offsetY /= 2
+    else:
+        offsetX = getArg(request,"offsetX",10,True)
+        offsetY = getArg(request,"offsetY",offsetX,True)
+
+    request.image_data['image'] = ImageChops.offset(request.image_data['image'],offsetX,offsetY)
+    return sendImage(request.image_data)
+
+
+@augur.route("/chops/haze", methods=["POST"])
+def chops_haze():
+    # This function includes some nasty int to float to int math and I am deeply sorry
+    # Prep Work
+    # Strength is expected to be a value between 0 and 2
+    strength = getArg(request,"strength",1.0)
+    if strength == 0:
+        return sendImage(request.image_data)
+    print strength
+    original = copy.deepcopy(request.image_data['image'])
+    (offsetX,offsetY) = original.size
+    offsetX /= int(math.ceil((60.0 / strength)))
+    offsetY /= int(math.ceil((60.0 / strength)))
+    # Adjust Brightness for Adjustment Images
+    brightness = ImageEnhance.Brightness(original)
+    brightImage = brightness.enhance(1 + (strength / 4.0))
+    darkImage = brightness.enhance(1 - (strength / 4.0))
+    # Offset Adjustment Images
+    brightImage = ImageChops.offset(brightImage,offsetX,offsetY)
+    darkImage = ImageChops.offset(darkImage,-1*offsetX,offsetY)
+    # Blur Adjustment Images
+    brightImage = brightImage.filter(ImageFilter.BoxBlur(20 + int(math.ceil((strength * 10)))))
+    darkImage = darkImage.filter(ImageFilter.BoxBlur(20 + int(math.ceil((strength * 10)))))
+    # Blend Images
+    hazeImage = ImageChops.blend(brightImage,darkImage,0.5)
+    original = ImageChops.blend(original,hazeImage,0.5)
+    # Increase Contrast
+    contrast = ImageEnhance.Contrast(original)
+    original = contrast.enhance(1 + (strength / 5.0))
+    original = original.crop((offsetX,offsetY,original.width-offsetX,original.height-offsetY))
+    original = original.resize((request.image_data['image'].width,request.image_data['image'].height))
+    request.image_data['image'] = original
+    return sendImage(request.image_data)
 
 
 # Fun endpoints
