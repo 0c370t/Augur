@@ -149,22 +149,22 @@
         "field":"center",
         "desc":"Boolean flag to use width/2 and height/2 for offsets",
         "format":"(True)|(False)"
-      },
-      "example_requets":[
-        {
-          "desc":"Using X offset only",
-          "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'offsetX=40px' > save_location.jpg"
-        },{
-          "desc":"Using Y offset only",
-          "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'offsetX=40px' -F 'offsetY=60px' > save_location.jpg"
-        },{
-          "desc":"Using center",
-          "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'center=true' > save_location.jpg"
-        }
-      ],
-      "response":"Image file as response"
-    }
-  }
+      }
+    },
+    "example_requests":[
+      {
+        "desc":"Using X offset only",
+        "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'offsetX=40px' > save_location.jpg"
+      },{
+        "desc":"Using Y offset only",
+        "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'offsetX=40px' -F 'offsetY=60px' > save_location.jpg"
+      },{
+        "desc":"Using center",
+        "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'center=true' > save_location.jpg"
+      }
+    ],
+    "response":"Image file as response"
+  },
   {
     "method":"POST",
     "title": "Needs More",
