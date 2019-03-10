@@ -10,6 +10,7 @@ import os
 import random
 import re
 import copy
+import math
 
 augur = Flask(__name__, static_url_path="", static_folder="static")
 application = augur
@@ -115,26 +116,34 @@ def chops_offest():
 
 @augur.route("/chops/haze", methods=["POST"])
 def chops_haze():
+    # This function includes some nasty int to float to int math and I am deeply sorry
     # Prep Work
+    # Strength is expected to be a value between 0 and 2
+    strength = getArg(request,"strength",1.0)
+    if strength == 0:
+        return sendImage(request.image_data)
+    print strength
     original = request.image_data['image']
     (offsetX,offsetY) = original.size
-    offsetX /= 40
-    offsetY /= 40
+    offsetX /= int(math.ceil((60.0 / strength)))
+    offsetY /= int(math.ceil((60.0 / strength)))
     # Adjust Brightness for Adjustment Images
     brightness = ImageEnhance.Brightness(original)
-    brightImage = brightness.enhance(1.25)
-    darkImage = brightness.enhance(0.75)
+    brightImage = brightness.enhance(1 + (strength / 4.0))
+    darkImage = brightness.enhance(1 - (strength / 4.0))
     # Offset Adjustment Images
     brightImage = ImageChops.offset(brightImage,offsetX,offsetY)
     darkImage = ImageChops.offset(darkImage,-1*offsetX,offsetY)
+    # Blur Adjustment Images
+    brightImage = brightImage.filter(ImageFilter.BoxBlur(20 + int(math.ceil((strength * 10)))))
+    darkImage = darkImage.filter(ImageFilter.BoxBlur(20 + int(math.ceil((strength * 10)))))
     # Blend Images
     hazeImage = ImageChops.blend(brightImage,darkImage,0.5)
     original = ImageChops.blend(original,hazeImage,0.5)
     # Increase Contrast
     contrast = ImageEnhance.Contrast(original)
-    original = contrast.enhance(1.1)
+    original = contrast.enhance(1 + (strength / 5.0))
     original = original.crop((offsetX,offsetY,original.width-offsetX,original.height-offsetY))
-
 
     request.image_data['image'] = original
     return sendImage(request.image_data)
