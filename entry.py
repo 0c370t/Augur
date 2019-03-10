@@ -147,9 +147,15 @@ def getArg(request, arg, default, isPixel=False):
     else:
         try:
             if arg in request.args:
-                return type(default)(getPixelValue(request.args[arg]))
+                if isPixel:
+                    return type(default)(getPixelValue(request.args[arg]))
+                else:
+                    return type(default)(request.args[arg])
             else:
-                return type(default)(getPixelValue(request.form[arg]))
+                if isPixel:
+                    return type(default)(getPixelValue(request.form[arg]))
+                else:
+                    return type(default)(request.form[arg])
         except:
             raise InvalidRequest("Parameter %s was given with invalid format! (Default for parameter is %s)" % (arg,default))
 
