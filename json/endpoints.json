@@ -167,6 +167,30 @@
   },
   {
     "method":"POST",
+    "title":"Offset",
+    "route":"/chops/haze/",
+    "description":"Makes the image look \"hazy\" through brightness manipulation, blurring, and reconstruction.",
+    "parameters":{
+      "strength":{
+        "field":"strength",
+        "desc":"Strength of effect (0<strength<=2)",
+        "format":"0.[\\d]+|1(.[\\d]+)?|2"
+      }
+    },
+    "example_requests":[
+      {
+        "desc":"Using default strength",
+        "example":"curl '%url%chops/haze' -F file='@.../file.jpg' > save_location.jpg"
+      },
+      {
+        "desc":"Specifying strength",
+        "example":"curl %url%chops/haze -F file='@.../file.jpg' -F 'strength=1.5' > save_location.jpg"
+      }
+    ],
+    "response":"Image file as response"
+  },
+  {
+    "method":"POST",
     "title": "Needs More",
     "route":"/fun/needsmore/",
     "description":"JPEG-Ify's your image",
