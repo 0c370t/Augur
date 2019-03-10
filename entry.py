@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 from flask import Flask, render_template, jsonify, request, send_file, url_for
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageChops, ImageEnhance
 from StringIO import StringIO
 from io import BytesIO
 import requests
@@ -9,6 +9,8 @@ import sys
 import os
 import random
 import re
+import copy
+import math
 
 augur = Flask(__name__, static_url_path="", static_folder="static")
 application = augur
@@ -18,46 +20,22 @@ sys.path.insert(0, augur.root_path)
 os.chdir(augur.root_path)
 from errors import InvalidRequest
 from image_format import getFormatByExtension, isValidExtension, getValidExtensions, getExtensionByFormat
+import doc_builder
+
 # TODO: Research other ways a file could be sent or referenced
 # TODO  Download more ram
-
-# Globals
-endpoints_raw = open("json/endpoints.json").read()
-endpoint_docs = json.loads(endpoints_raw)
-endpoint_routes = [re.sub('\[(\w+)\]','',endpoint['route']) for endpoint in endpoint_docs]
-global_parameters_raw = open("json/global_params.json").read()
-global_parameters = json.loads(global_parameters_raw)
 
 # Augur Routes
 
 @augur.route("/")
 def index():
     # Displays an explanation of the API
-    return render_template("index.html.jinja", docs=endpoint_docs, global_params=global_parameters)
+    return render_template("index.html.jinja", docs=doc_builder.getAllDocs(), global_params=doc_builder.getGlobalParams())
 
 
 @augur.route("/doc/<path:requested_doc>", methods=["GET"])
 def doc(requested_doc):
-    # Force proper leading and trailing slashes
-    while requested_doc[-1] == '/':
-        requested_doc = requested_doc[:-1]
-    while requested_doc[0] == '/':
-        requested_doc = requested_doc[1:]
-    requested_doc = "/"+requested_doc+"/"
-
-
-    if requested_doc in endpoint_routes:
-        indexOfDoc = endpoint_routes.index(requested_doc)
-        doc = endpoint_docs[indexOfDoc]
-        # Add Global Parameters
-        doc['global_parameters'] = global_parameters[doc['method']]
-        # Substitue in correct url
-        for example in doc['example_requests']:
-            example['example'] = example['example'].replace("%url%", url_for('index',_external=True))
-        return jsonify(doc)
-    # User asked for invalid endpoint
-    raise InvalidRequest(
-        "The endpoint you have requested does not exist!", endpoint=requested_doc)
+        return doc_builder.getDoc(requested_doc)
 
 # Augur POST Endpoints
 
@@ -95,6 +73,54 @@ def blur_unsharp():
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.UnsharpMask(radius, percent, threshold))
     return sendImage(request.image_data)
 
+# Chop Endpoints
+@augur.route("/chops/offset", methods=["POST"])
+def chops_offest():
+    if getArg(request,"center",False):
+        (offsetX,offsetY) = request.image_data['image'].size
+        offsetX /= 2
+        offsetY /= 2
+    else:
+        offsetX = getArg(request,"offsetX",10,True)
+        offsetY = getArg(request,"offsetY",offsetX,True)
+
+    request.image_data['image'] = ImageChops.offset(request.image_data['image'],offsetX,offsetY)
+    return sendImage(request.image_data)
+
+
+@augur.route("/chops/haze", methods=["POST"])
+def chops_haze():
+    # This function includes some nasty int to float to int math and I am deeply sorry
+    # Prep Work
+    # Strength is expected to be a value between 0 and 2
+    strength = getArg(request,"strength",1.0)
+    if strength == 0:
+        return sendImage(request.image_data)
+    print strength
+    original = copy.deepcopy(request.image_data['image'])
+    (offsetX,offsetY) = original.size
+    offsetX /= int(math.ceil((60.0 / strength)))
+    offsetY /= int(math.ceil((60.0 / strength)))
+    # Adjust Brightness for Adjustment Images
+    brightness = ImageEnhance.Brightness(original)
+    brightImage = brightness.enhance(1 + (strength / 4.0))
+    darkImage = brightness.enhance(1 - (strength / 4.0))
+    # Offset Adjustment Images
+    brightImage = ImageChops.offset(brightImage,offsetX,offsetY)
+    darkImage = ImageChops.offset(darkImage,-1*offsetX,offsetY)
+    # Blur Adjustment Images
+    brightImage = brightImage.filter(ImageFilter.BoxBlur(20 + int(math.ceil((strength * 10)))))
+    darkImage = darkImage.filter(ImageFilter.BoxBlur(20 + int(math.ceil((strength * 10)))))
+    # Blend Images
+    hazeImage = ImageChops.blend(brightImage,darkImage,0.5)
+    original = ImageChops.blend(original,hazeImage,0.5)
+    # Increase Contrast
+    contrast = ImageEnhance.Contrast(original)
+    original = contrast.enhance(1 + (strength / 5.0))
+    original = original.crop((offsetX,offsetY,original.width-offsetX,original.height-offsetY))
+    original = original.resize((request.image_data['image'].width,request.image_data['image'].height))
+    request.image_data['image'] = original
+    return sendImage(request.image_data)
 
 
 # Fun endpoints

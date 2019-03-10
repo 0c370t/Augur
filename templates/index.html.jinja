@@ -51,11 +51,13 @@
     {% endfor %}
   </table>
   {% endif %}
-  <h3>Examples</h3>
+  {% if endpoint.example_requests|length > 0 %}
+  <h3>Example{% if endpoint.example_requests|length > 1 %}s{% endif %}</h3>
   {% for request in endpoint.example_requests %}
   <h4>{{ request.desc }}</h4>
   <pre class="example">{{ request.example|replace('%url%',url_for('index', _external=true)) }}</pre>
   {% endfor %}
+  {% endif %}
   <h4>Response</h4>
   <pre class="example">{{ endpoint.response }}</pre>
 </section>

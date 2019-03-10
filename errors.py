@@ -12,3 +12,12 @@ class InvalidRequest(Exception):
 
     def to_dict(self):
         return self.kwargs
+
+class UnknownValue(Exception):
+    status_code = 400
+
+    def __init__(self,message):
+        Exception.__init__(self)
+        self.message = message
+    def to_dict(self):
+        return {'error':message}
