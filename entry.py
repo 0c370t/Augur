@@ -90,7 +90,7 @@ def blur_box():
 @augur.route("/blur/unsharp", methods=["POST"])
 def blur_unsharp():
     radius = getArg(request,"radius",2)
-    radius = int(getPixelValue(radius,"radius"))
+    radius = getPixelValue(radius,"radius")
     percent = getArg(request,"percent",150)
     threshold = getArg(request,"threshold",3)
 
