@@ -123,7 +123,7 @@ def chops_haze():
     if strength == 0:
         return sendImage(request.image_data)
     print strength
-    original = request.image_data['image']
+    original = copy.deepcopy(request.image_data['image'])
     (offsetX,offsetY) = original.size
     offsetX /= int(math.ceil((60.0 / strength)))
     offsetY /= int(math.ceil((60.0 / strength)))
@@ -144,7 +144,7 @@ def chops_haze():
     contrast = ImageEnhance.Contrast(original)
     original = contrast.enhance(1 + (strength / 5.0))
     original = original.crop((offsetX,offsetY,original.width-offsetX,original.height-offsetY))
-
+    original = original.resize((request.image_data['image'].width,request.image_data['image'].height))
     request.image_data['image'] = original
     return sendImage(request.image_data)
 
