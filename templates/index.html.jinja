@@ -54,7 +54,7 @@
   <h3>Examples</h3>
   {% for request in endpoint.example_requests %}
   <h4>{{ request.desc }}</h4>
-  <pre class="example">{{ request.example }}</pre>
+  <pre class="example">{{ request.example|replace('%url%',url_for('index', _external=true)) }}</pre>
   {% endfor %}
   <h4>Response</h4>
   <pre class="example">{{ endpoint.response }}</pre>
