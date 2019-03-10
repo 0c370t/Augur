@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 from flask import Flask, render_template, jsonify, request, send_file, url_for
-from PIL import Image, ImageFilter, ImageChops
+from PIL import Image, ImageFilter, ImageChops, ImageEnhance
 from StringIO import StringIO
 from io import BytesIO
 import requests
@@ -9,6 +9,7 @@ import sys
 import os
 import random
 import re
+import copy
 
 augur = Flask(__name__, static_url_path="", static_folder="static")
 application = augur
@@ -111,6 +112,32 @@ def chops_offest():
     request.image_data['image'] = ImageChops.offset(request.image_data['image'],offsetX,offsetY)
     return sendImage(request.image_data)
 
+
+@augur.route("/chops/haze", methods=["POST"])
+def chops_haze():
+    # Prep Work
+    original = request.image_data['image']
+    (offsetX,offsetY) = original.size
+    offsetX /= 40
+    offsetY /= 40
+    # Adjust Brightness for Adjustment Images
+    brightness = ImageEnhance.Brightness(original)
+    brightImage = brightness.enhance(1.25)
+    darkImage = brightness.enhance(0.75)
+    # Offset Adjustment Images
+    brightImage = ImageChops.offset(brightImage,offsetX,offsetY)
+    darkImage = ImageChops.offset(darkImage,-1*offsetX,offsetY)
+    # Blend Images
+    hazeImage = ImageChops.blend(brightImage,darkImage,0.5)
+    original = ImageChops.blend(original,hazeImage,0.5)
+    # Increase Contrast
+    contrast = ImageEnhance.Contrast(original)
+    original = contrast.enhance(1.1)
+    original = original.crop((offsetX,offsetY,original.width-offsetX,original.height-offsetY))
+
+
+    request.image_data['image'] = original
+    return sendImage(request.image_data)
 
 
 # Fun endpoints
