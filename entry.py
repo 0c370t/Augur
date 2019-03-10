@@ -63,8 +63,7 @@ def doc(requested_doc):
 
 @augur.route("/thumbnail", methods=["POST"])
 def thumbnail():
-    output_size = getArg(request,"size",200)
-    output_size = getPixelValue(output_size)
+    output_size = getArg(request,"size",200, True)
 
     request.image_data['image'].thumbnail((output_size, output_size))
 
@@ -74,8 +73,7 @@ def thumbnail():
 
 @augur.route("/blur/gaussian", methods=["POST"])
 def blur_gaussian():
-    radius = getArg(request,"radius",2)
-    radius = getPixelValue(radius)
+    radius = getArg(request,"radius",2,True)
 
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.GaussianBlur(radius))
 
@@ -83,16 +81,14 @@ def blur_gaussian():
 
 @augur.route("/blur/box", methods=["POST"])
 def blur_box():
-    radius = getArg(request,"radius",2)
-    radius = getPixelValue(radius)
+    radius = getArg(request,"radius",2,True)
 
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.BoxBlur(radius))
     return sendImage(request.image_data)
 
 @augur.route("/blur/unsharp", methods=["POST"])
 def blur_unsharp():
-    radius = getArg(request,"radius",2)
-    radius = getPixelValue(radius)
+    radius = getArg(request,"radius",2,True)
     percent = getArg(request,"percent",150)
     threshold = getArg(request,"threshold",3)
 
