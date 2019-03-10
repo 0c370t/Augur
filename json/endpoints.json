@@ -2,7 +2,7 @@
   {
     "method" : "GET",
     "title" : "Documentation",
-    "route" : "/doc/[endpoint]",
+    "route" : "/doc/",
     "description" : "Gives a json representation of documentation for specified endpoint",
     "parameters":{
       "endpoint":{
@@ -13,12 +13,12 @@
     },
     "example_requests":[
       {
-        "desc":"Get Thumbnail documentation",
-        "example":"curl '%url%doc/thumbnail'"
+        "desc":"Get /thumbnail documentation",
+        "args":"thumbnail"
       },
       {
-        "desc":"Get doc documentation",
-        "example":"curl '%url%doc/doc'"
+        "desc":"Get /doc documentation",
+        "args":"doc"
       }
     ],
     "response":"{\n\tmethod: GET|POST,\n\ttitle: Legible Title,\n\troute: Route to endpoint,\n\tdescription: Long-form description of endpoint functionality,\n\tparameters:{\n\t\tparameter_1:{\n\t\t\tfield: Expected field name in form or url,\n\t\t\tdesc: Description of expected content,\n\t\t\tformat: Regex or other expected format\n\t\t}, ...\n\t},\n\tglobal_parameters:{ // Applicable to all endpoints with this method\n\t\tglobal_parameter_1:{\n\t\t\tfield: Expected field name in form or url,\n\t\t\tdesc: Description of expected content,\n\t\t\tformat: Regex or other expected format\n\t\t}\n\t}\n\texample_requests:[\n\t\t{\n\t\t\tdesc: Description of what this command does,\n\t\t\texample: curl command that will call the endpoint\n\t\t}, ...\n\t],\n\tresponse: Structure of expected response (like this),\n\terror_format: Structure of generated errors\n}"
@@ -37,12 +37,8 @@
     },
     "example_requests":[
       {
-        "desc":"With size in URL",
-        "example":"curl '%url%thumbnail?size=100px' -F 'file=@.../test_image.jpg' > image.jpg"
-      },
-      {
-        "desc":"With size in form data",
-        "example":"curl '%url%thumbnail' -F 'file=@.../test_image.jpg' -F 'size=100px' > image.jpg"
+        "desc":"",
+        "form":"-F 'size=100px'"
       }
     ],
     "response":"Image file as response"
@@ -61,12 +57,8 @@
     },
     "example_requests":[
       {
-        "desc":"With Radius in URL",
-        "example":"curl '%url%blur/gaussian?radius=10px' -F 'file=@.../test_image.jpg' > image.jpg "
-      },
-      {
-        "desc":"With Radius in form data",
-        "example":"curl '%url%blur/gaussian' -F 'file=@.../test_image.jpg' -F 'radius=10px' > image.jpg"
+        "desc":"",
+        "form":" -F 'radius=10px'"
       }
     ],
     "response":"Image file as response"
@@ -85,12 +77,8 @@
     },
     "example_requests":[
       {
-        "desc":"With Radius in URL",
-        "example":"curl '%url%blur/box?radius=10px' -F 'file=@.../test_image.jpg' > image.jpg "
-      },
-      {
-        "desc":"With Radius in form data",
-        "example":"curl '%url%blur/box' -F 'file=@.../test_image.jpg' -F 'radius=10px' > image.jpg"
+        "desc":"",
+        "form":"-F 'radius=10px'"
       }
     ],
     "response":"Image file as response"
@@ -120,11 +108,11 @@
     "example_requests":[
       {
         "desc":"Declaring all variables",
-        "example":"curl '%url%blur/unsharp' -F 'radius=50px' -F 'threshold=1' -F 'percent=150' -F 'file=@.../test_image.jpg' -F 'output_format=png'"
+        "form":"-F 'radius=50px' -F 'threshold=1' -F 'percent=150'"
       },
       {
         "desc":"Declaring only radius",
-        "example":"curl '%url%blur/unsharp' -F 'radius=50px' -F 'file=@.../test_image.jpg' -F 'output_format=png'"
+        "form":"-F 'radius=50px'"
       }
     ],
     "response":"Image file as response"
@@ -154,13 +142,13 @@
     "example_requests":[
       {
         "desc":"Using X offset only",
-        "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'offsetX=40px' > save_location.jpg"
+        "form":"-F 'offsetX=40px'"
       },{
         "desc":"Using Y offset only",
-        "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'offsetX=40px' -F 'offsetY=60px' > save_location.jpg"
+        "form":"-F 'offsetX=40px' -F 'offsetY=60px'"
       },{
         "desc":"Using center",
-        "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'center=true' > save_location.jpg"
+        "form":"-F 'center=true'"
       }
     ],
     "response":"Image file as response"
@@ -180,11 +168,11 @@
     "example_requests":[
       {
         "desc":"Using default strength",
-        "example":"curl '%url%chops/haze' -F file='@.../file.jpg' > save_location.jpg"
+        "example":""
       },
       {
         "desc":"Specifying strength",
-        "example":"curl %url%chops/haze -F file='@.../file.jpg' -F 'strength=1.5' > save_location.jpg"
+        "example":" -F 'strength=1.5'"
       }
     ],
     "response":"Image file as response"
@@ -194,12 +182,7 @@
     "title": "Needs More",
     "route":"/fun/needsmore/",
     "description":"JPEG-Ify's your image",
-    "example_requests":[
-      {
-        "desc":"Using Remote File",
-        "example":"curl '%url%fun/needsmore' -F 'file=@.../test_image.jpg'"
-      }
-    ],
+    "example_requests":[],
     "response":"Image file as response"
   }
 ]

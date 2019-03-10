@@ -20,46 +20,22 @@ sys.path.insert(0, augur.root_path)
 os.chdir(augur.root_path)
 from errors import InvalidRequest
 from image_format import getFormatByExtension, isValidExtension, getValidExtensions, getExtensionByFormat
+import doc_builder
+
 # TODO: Research other ways a file could be sent or referenced
 # TODO  Download more ram
-
-# Globals
-endpoints_raw = open("json/endpoints.json").read()
-endpoint_docs = json.loads(endpoints_raw)
-endpoint_routes = [re.sub('\[(\w+)\]','',endpoint['route']) for endpoint in endpoint_docs]
-global_parameters_raw = open("json/global_params.json").read()
-global_parameters = json.loads(global_parameters_raw)
 
 # Augur Routes
 
 @augur.route("/")
 def index():
     # Displays an explanation of the API
-    return render_template("index.html.jinja", docs=endpoint_docs, global_params=global_parameters)
+    return render_template("index.html.jinja", docs=doc_builder.getAllDocs(), global_params=doc_builder.getGlobalParams())
 
 
 @augur.route("/doc/<path:requested_doc>", methods=["GET"])
 def doc(requested_doc):
-    # Force proper leading and trailing slashes
-    while requested_doc[-1] == '/':
-        requested_doc = requested_doc[:-1]
-    while requested_doc[0] == '/':
-        requested_doc = requested_doc[1:]
-    requested_doc = "/"+requested_doc+"/"
-
-
-    if requested_doc in endpoint_routes:
-        indexOfDoc = endpoint_routes.index(requested_doc)
-        doc = endpoint_docs[indexOfDoc]
-        # Add Global Parameters
-        doc['global_parameters'] = global_parameters[doc['method']]
-        # Substitue in correct url
-        for example in doc['example_requests']:
-            example['example'] = example['example'].replace("%url%", url_for('index',_external=True))
-        return jsonify(doc)
-    # User asked for invalid endpoint
-    raise InvalidRequest(
-        "The endpoint you have requested does not exist!", endpoint=requested_doc)
+        return doc_builder.getDoc(requested_doc)
 
 # Augur POST Endpoints
 
