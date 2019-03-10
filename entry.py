@@ -102,6 +102,8 @@ def blur_unsharp():
 def chops_offest():
     if getArg(request,"center",False):
         (offsetX,offsetY) = request.image_data['image'].size
+        offsetX /= 2
+        offsetY /= 2
     else:
         offsetX = getArg(request,"offsetX",10,True)
         offsetY = getArg(request,"offsetY",offsetX,True)
