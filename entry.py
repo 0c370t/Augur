@@ -64,7 +64,7 @@ def doc(requested_doc):
 @augur.route("/thumbnail", methods=["POST"])
 def thumbnail():
     output_size = getArg(request,"size",200)
-    output_size = getPixelValue(output_size,'size')
+    output_size = getPixelValue(output_size)
 
     request.image_data['image'].thumbnail((output_size, output_size))
 
@@ -75,7 +75,7 @@ def thumbnail():
 @augur.route("/blur/gaussian", methods=["POST"])
 def blur_gaussian():
     radius = getArg(request,"radius",2)
-    radius = getPixelValue(radius,"radius")
+    radius = getPixelValue(radius)
 
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.GaussianBlur(radius))
 
@@ -84,7 +84,7 @@ def blur_gaussian():
 @augur.route("/blur/box", methods=["POST"])
 def blur_box():
     radius = getArg(request,"radius",2)
-    radius = getPixelValue(radius,"radius")
+    radius = getPixelValue(radius)
 
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.BoxBlur(radius))
     return sendImage(request.image_data)
@@ -92,7 +92,7 @@ def blur_box():
 @augur.route("/blur/unsharp", methods=["POST"])
 def blur_unsharp():
     radius = getArg(request,"radius",2)
-    radius = getPixelValue(radius,"radius")
+    radius = getPixelValue(radius)
     percent = getArg(request,"percent",150)
     threshold = getArg(request,"threshold",3)
 
@@ -157,7 +157,7 @@ def getArg(request, arg, default):
         except:
             raise InvalidRequest("Parameter %s was given with invalid format! (Default for parameter is %s)" % (arg,default))
 
-def getPixelValue(value, name):
+def getPixelValue(value):
     # Takes either string or integer
     # Returns integer, will remove trailing px from string, or give error
     try:
@@ -167,7 +167,7 @@ def getPixelValue(value, name):
             return int(value[:-2])
         else:
             raise InvalidRequest(
-                "Invalid parameter", given_value=value, parameter=name)
+                "Invalid value given", given_value=value)
 
 def sendImage(image_data, **kwargs):
     # Expects dict strucutre from getImageDataFromRequest()
