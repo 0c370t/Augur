@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 from flask import Flask, render_template, jsonify, request, send_file, url_for
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageChops
 from StringIO import StringIO
 from io import BytesIO
 import requests
@@ -96,6 +96,22 @@ def blur_unsharp():
 
     request.image_data['image'] = request.image_data['image'].filter(ImageFilter.UnsharpMask(radius, percent, threshold))
     return sendImage(request.image_data)
+
+# Chop Endpoints
+@augur.route("/chops/offset", methods=["POST"])
+def chops_offest():
+    if getArg(request,"center",False):
+        (offsetX,offsetY) = request.image_data['image'].size
+    else:
+        offsetX = getArg(request,"offsetX",10,True)
+        offsetY = getArg(request,"offsetY",offsetX,True)
+
+    request.image_data['image'] = ImageChops.offset(request.image_data['image'],offsetX,offsetY)
+    return sendImage(request.image_data)
+
+
+
+# Fun endpoints
 
 @augur.route("/fun/needsmore", methods=["POST"])
 def fun_needsmore():
