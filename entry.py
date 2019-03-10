@@ -102,7 +102,7 @@ def blur_unsharp():
 @augur.route("/fun/needsmore", methods=["POST"])
 def fun_needsmore():
     # Created so we can iterate non-destructively
-    temp_image_data = temp_image_data = {
+    temp_image_data = {
         'image' : request.image_data['image'],
         'image_name' : request.image_data['image_name'].split('.')[0] + "." + "jpg",
         'image_format' : "JPEG",
