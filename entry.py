@@ -1,5 +1,5 @@
 #!/usr/bin/python2.7
-from flask import Flask, render_template, jsonify, request, send_file
+from flask import Flask, render_template, jsonify, request, send_file, url_for
 from PIL import Image, ImageFilter
 from StringIO import StringIO
 from io import BytesIO
@@ -51,6 +51,9 @@ def doc(requested_doc):
         doc = endpoint_docs[indexOfDoc]
         # Add Global Parameters
         doc['global_parameters'] = global_parameters[doc['method']]
+        # Substitue in correct url
+        for example in doc['example_requests']:
+            example['example'] = example['example'].replace("%url%", url_for('index',_external=True))
         return jsonify(doc)
     # User asked for invalid endpoint
     raise InvalidRequest(
