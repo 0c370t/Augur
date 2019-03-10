@@ -17,14 +17,14 @@ global_parameters = json.loads(global_parameters_raw)
 
 # Mutate Examples
 for doc in endpoint_docs:
-    if doc['method'] == 'POST':
-        for example in doc['example_requests']:
-            prefix = "curl '%s%s' -F 'file=@.../input_image.jpg' " % ('https://augur.noimbrian.com/',doc['route'])
-            suffix = " > output_image.jpg"
-            example['example'] = prefix + example['example'] + suffix
-    else:
-        for example in doc['example_requests']:
-            example['example'] = "curl '%s%s'" % ('https://augur.noimbrian.com/', example['example'])
+    for example in doc['example_requests']:
+        if 'form' not in example:
+            example['form'] = ""
+        if 'args' not in example:
+            example['args'] = ""
+        example['example'] = "curl '%s%s%s' %s" % ('https://augur.noimbrian.com',doc['route'],example['args'],example['form'])
+        if doc['method'] == 'POST':
+            example['example'] += " -F 'file=@.../input_image.jpg' > output_image.jpg"
 
 
 def getAllDocs():

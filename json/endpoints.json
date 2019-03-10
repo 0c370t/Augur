@@ -2,7 +2,7 @@
   {
     "method" : "GET",
     "title" : "Documentation",
-    "route" : "/doc/[endpoint]",
+    "route" : "/doc/",
     "description" : "Gives a json representation of documentation for specified endpoint",
     "parameters":{
       "endpoint":{
@@ -14,11 +14,11 @@
     "example_requests":[
       {
         "desc":"Get /thumbnail documentation",
-        "example":"/thumbnail"
+        "args":"thumbnail"
       },
       {
         "desc":"Get /doc documentation",
-        "example":"/doc"
+        "args":"doc"
       }
     ],
     "response":"{\n\tmethod: GET|POST,\n\ttitle: Legible Title,\n\troute: Route to endpoint,\n\tdescription: Long-form description of endpoint functionality,\n\tparameters:{\n\t\tparameter_1:{\n\t\t\tfield: Expected field name in form or url,\n\t\t\tdesc: Description of expected content,\n\t\t\tformat: Regex or other expected format\n\t\t}, ...\n\t},\n\tglobal_parameters:{ // Applicable to all endpoints with this method\n\t\tglobal_parameter_1:{\n\t\t\tfield: Expected field name in form or url,\n\t\t\tdesc: Description of expected content,\n\t\t\tformat: Regex or other expected format\n\t\t}\n\t}\n\texample_requests:[\n\t\t{\n\t\t\tdesc: Description of what this command does,\n\t\t\texample: curl command that will call the endpoint\n\t\t}, ...\n\t],\n\tresponse: Structure of expected response (like this),\n\terror_format: Structure of generated errors\n}"
@@ -38,7 +38,7 @@
     "example_requests":[
       {
         "desc":"",
-        "example":" -F 'size=100px'"
+        "form":"-F 'size=100px'"
       }
     ],
     "response":"Image file as response"
@@ -58,7 +58,7 @@
     "example_requests":[
       {
         "desc":"",
-        "example":" -F 'radius=10px'"
+        "form":" -F 'radius=10px'"
       }
     ],
     "response":"Image file as response"
@@ -78,7 +78,7 @@
     "example_requests":[
       {
         "desc":"",
-        "example":" -F 'radius=10px'"
+        "form":"-F 'radius=10px'"
       }
     ],
     "response":"Image file as response"
@@ -108,11 +108,11 @@
     "example_requests":[
       {
         "desc":"Declaring all variables",
-        "example":"-F 'radius=50px' -F 'threshold=1' -F 'percent=150'"
+        "form":"-F 'radius=50px' -F 'threshold=1' -F 'percent=150'"
       },
       {
         "desc":"Declaring only radius",
-        "example":" -F 'radius=50px'"
+        "form":"-F 'radius=50px'"
       }
     ],
     "response":"Image file as response"
@@ -142,13 +142,13 @@
     "example_requests":[
       {
         "desc":"Using X offset only",
-        "example":" -F 'offsetX=40px'"
+        "form":"-F 'offsetX=40px'"
       },{
         "desc":"Using Y offset only",
-        "example":" -F 'offsetX=40px' -F 'offsetY=60px'"
+        "form":"-F 'offsetX=40px' -F 'offsetY=60px'"
       },{
         "desc":"Using center",
-        "example":" -F 'center=true'"
+        "form":"-F 'center=true'"
       }
     ],
     "response":"Image file as response"
@@ -182,12 +182,7 @@
     "title": "Needs More",
     "route":"/fun/needsmore/",
     "description":"JPEG-Ify's your image",
-    "example_requests":[
-      {
-        "desc":"Using Remote File",
-        "example":""
-      }
-    ],
+    "example_requests":[],
     "response":"Image file as response"
   }
 ]
