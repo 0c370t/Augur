@@ -98,7 +98,6 @@ def chops_haze():
         return sendImage(request.image_data)
     if strength > 2:
         raise InvalidRequest("Your request was too strong! (Strength was higher than 2)")
-    print strength
     original = copy.deepcopy(request.image_data['image'])
     (offsetX,offsetY) = original.size
     offsetX /= int(math.ceil((60.0 / strength)))
