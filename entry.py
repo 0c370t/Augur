@@ -142,7 +142,7 @@ def error(error):
 
 # Helper Methods
 
-def getArg(request, arg, default):
+def getArg(request, arg, default, isPixel=False):
     # Gets argument from whichever method is was sent
     # Also typecasts to the default's type so
     # Calling function can assume it's type safely
@@ -151,9 +151,9 @@ def getArg(request, arg, default):
     else:
         try:
             if arg in request.args:
-                return type(default)(request.args[arg])
+                return type(default)(getPixelValue(request.args[arg]))
             else:
-                return type(default)(request.form[arg])
+                return type(default)(getPixelValue(request.form[arg]))
         except:
             raise InvalidRequest("Parameter %s was given with invalid format! (Default for parameter is %s)" % (arg,default))
 
