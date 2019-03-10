@@ -131,6 +131,42 @@
   },
   {
     "method":"POST",
+    "title": "Offset",
+    "route":"/chops/offset/",
+    "description":"Offsets the pixels in an image by the given offset amount",
+    "parameters":{
+      "offsetX":{
+        "field":"offsetX",
+        "desc":"Offset for x axis (in pixels), defaults to 20px",
+        "format":"[0-9]+(px)?"
+      },
+      "offsetY":{
+        "field":"offsetY",
+        "desc":"Offset for y axis (in pixels), defaults to offsetX",
+        "format":"[0-9]+(px)?"
+      },
+      "center":{
+        "field":"center",
+        "desc":"Boolean flag to use width/2 and height/2 for offsets",
+        "format":"(True)|(False)"
+      },
+      "example_requets":[
+        {
+          "desc":"Using X offset only",
+          "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'offsetX=40px' > save_location.jpg"
+        },{
+          "desc":"Using Y offset only",
+          "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'offsetX=40px' -F 'offsetY=60px' > save_location.jpg"
+        },{
+          "desc":"Using center",
+          "example":"curl '%url%chops/offset' -F file='@.../file.jpg' -F 'center=true' > save_location.jpg"
+        }
+      ],
+      "response":"Image file as response"
+    }
+  }
+  {
+    "method":"POST",
     "title": "Needs More",
     "route":"/fun/needsmore/",
     "description":"JPEG-Ify's your image",
