@@ -1,3 +1,5 @@
 *.py[co]
 
 doc-tool/outfile\.json
+
+view/
