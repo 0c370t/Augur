@@ -21,6 +21,9 @@ os.chdir(augur.root_path)
 from errors import InvalidRequest
 from image_format import getFormatByExtension, isValidExtension, getValidExtensions, getExtensionByFormat
 import doc_builder
+from view import AugurView
+
+augur.register_blueprint(AugurView.view, url_prefix="/view")
 
 # TODO: Research other ways a file could be sent or referenced
 # TODO  Download more ram
