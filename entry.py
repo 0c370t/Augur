@@ -149,7 +149,7 @@ def fun_needsmore():
 
 @augur.before_request
 def preprocessor():
-    if request.method == "POST":
+    if request.method == "POST" and request.url.split('/')[3] != 'view':
         # Populate image_data based on attachment
         # This is done for every endpoint (because they all have images, duh)
         request.image_data = getImageDataFromRequest(request)
