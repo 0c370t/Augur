@@ -1,0 +1,16 @@
+{
+  "schemaVersion" :2,
+  "dockerfileLines" :[
+    "FROM ubuntu:latest",
+    "MAINTAINER Brian D <contact@noimbrian.com>",
+    "RUN apt-get update -y",
+    "RUN apt-get install -y python-pip python2.7-dev build-essential",
+    "COPY . /app",
+    "WORKDIR /app",
+    "RUN pip install -r requirements.txt",
+    "EXPOSE 80",
+    "EXPOSE 5000",
+    "ENV FLASK_ENV production",
+    "CMD [ \"python\", \"entry.py\" ]"
+  ]
+}

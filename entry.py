@@ -258,3 +258,7 @@ def getImageDataFromRequest(request):
                 raise InvalidRequest("Invalid File Extension! (Must be one of %s)" % getValidExtensions())
         else:
             raise InvalidRequest("Invalid File Type! (Files can be attached directly, or given as a url)")
+
+
+if __name__ == "__main__":
+    augur.run(host='0.0.0.0')
