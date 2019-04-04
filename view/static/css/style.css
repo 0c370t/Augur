@@ -1,0 +1,84 @@
+/*
+  Created by Brian Donald
+
+	Media Queries used in this sheet are :
+	Anything bigger than phone:
+		@media screen and (min-width:769px) and (max-resolution:143dpi)
+
+	Tablet / Phablet Screens:
+		@media screen and (min-width:769px) and (max-width:1024px),(min-width:1024px) and (min-resolution: 144dpi)
+
+	Desktop Only:
+		@media screen and (min-width:1025px) and (max-resolution: 143dpi)
+
+  Border Colors:
+    Heavy : #222
+    Light : #888
+*/
+:root {
+  font-size: 18px;
+  font-family: sans-serif;
+}
+html{
+	background-color:#EEE;
+}
+body{
+	background-color:white;
+}
+/*
+  Header Styling
+*/
+body>header {
+  border-bottom: 1px solid #888;
+}
+body > header .text-wrapper{
+	padding: 1rem 0;
+}
+
+/* Desktop */
+@media screen and (min-width:1025px) and (max-resolution: 143dpi) {
+  body>header .text-wrapper{
+    padding: 2rem;
+  }
+}
+
+/*
+  Body Styling
+*/
+form#ajaxForm{
+	width:100%;
+	height:5rem;
+	display:block;
+}
+div#updateableImageContainer{
+	height:calc(100% - 5rem);
+}
+div#imageWrapper{
+  /*
+    This div will always be square and fill it's container
+    Math is completed in the document ready jQuery function
+  */
+  height: 100%;
+  margin: 0 auto;
+  max-width: 100%;
+}
+img#userImage{
+	height: auto;
+	min-width: 100%;
+	max-width: 100%;
+}
+
+
+/*
+  Footer Styling
+*/
+body>footer {
+  border-top: 1px solid #888;
+}
+
+body>footer span {
+  text-align: center;
+  width: 100%;
+  display: block;
+  line-height: 1.5rem;
+}

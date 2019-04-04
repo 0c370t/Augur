@@ -1,0 +1,22 @@
+{% extends 'view/template.html.jinja' %}
+
+{% block headScript %}
+<script src="static/js/view_formBuilder.js"></script>
+<script src="static/js/view_formFunction.js"></script>
+{% endblock %}
+
+{% block body %}
+<form action="javascript:;" id="ajaxForm">
+  <input type="file" name="file" id="pictureUploadInput" placeholder="Upload your image"/>
+  <button onclick="uploadFile()">Upload Image</button>
+  <select id="endpointSelector">
+    <option value=""></option>
+  </select>
+  <button onclick="modifyImage()">Perform Operation</button>
+</form>
+<div id="updateableImageContainer">
+  <div id="imageWrapper">
+    <img id="userImage" />
+  </div>
+</div>
+{% endblock %}

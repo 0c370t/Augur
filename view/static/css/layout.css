@@ -1,0 +1,71 @@
+/*
+  Created by Brian Donald
+
+	Media Queries used in this sheet are :
+	Anything bigger than phone:
+		@media screen and (min-width:769px) and (max-resolution:143dpi)
+
+	Tablet / Phablet Screens:
+		@media screen and (min-width:769px) and (max-width:1024px),(min-width:1024px) and (min-resolution: 144dpi)
+
+	Desktop Only:
+		@media screen and (min-width:1025px) and (max-resolution: 143dpi)
+*/
+
+/*
+  Full Page Layout
+*/
+body {
+  min-height:100vh;
+  width:80vw;
+  overflow-x:hidden;
+  margin:0 10vw;
+
+
+
+  display:grid;
+  grid-template-columns:1fr;
+  grid-template-rows: 6rem 1fr 3rem;
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+}
+
+body>header {
+  grid-area:header;
+}
+
+/* Body */
+body>main {
+  grid-area:main;
+}
+
+grid-area:footer;
+body>footer {
+}
+
+@media screen and (min-width:1025px) and (max-resolution:143dpi) {
+  body {}
+
+  body>header {}
+
+  body>main {}
+
+  body>footer {}
+}
+
+/* Header Layout */
+body > header{
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  position:relative;	
+}
+body > header .image-wrapper {
+	height:100%;
+}
+body > header .image-wrapper img{
+	height:100%;
+	width:6rem;
+}
