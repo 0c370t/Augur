@@ -1,12 +1,12 @@
 #!/usr/bin/python2.7
 from flask import Blueprint, render_template, current_app, jsonify, make_response, request, url_for
 from werkzeug.utils import secure_filename
-from Augur import doc_builder, image_format
 import os, sys, time, base64
 import requests
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 sys.path.insert(0,'..')
+from Augur import doc_builder, image_format
 
 view = Blueprint('AugurView',__name__,template_folder="templates",static_folder="static")
 #   Note to future Brian:
