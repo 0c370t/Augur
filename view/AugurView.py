@@ -1,8 +1,9 @@
 #!/usr/bin/python2.7
-from flask import Blueprint, render_template, current_app, jsonify, make_response, request, url_for, requests
+from flask import Blueprint, render_template, current_app, jsonify, make_response, request, url_for
 from werkzeug.utils import secure_filename
 from .. import doc_builder, image_format
 import os, sys, time, base64
+import requests
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 view = Blueprint('AugurView',__name__,template_folder="templates",static_folder="static")
@@ -40,7 +41,7 @@ def upload_image():
         # TODO: Ensure File doesn't conflict with an existing name (perhaps append some counter to the end of it?)
         image.save(os.path.join(UPLOAD_FOLDER, filename))
         # Make the request to Augur
-        request = requests.post("https://augur.noimbrian.com" + )
+        request = requests.post("https://augur.noimbrian.com")
 
 
         return make_response("static/img/tmp/user_uploads/%s" % filename, 200)
